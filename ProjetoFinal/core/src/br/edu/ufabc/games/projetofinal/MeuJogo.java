@@ -10,6 +10,7 @@ import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.Bullet;
 
 import br.edu.ufabc.games.projetofinal.screen.AbstractScreen;
 import br.edu.ufabc.games.projetofinal.screen.CreditsScreen;
@@ -23,6 +24,7 @@ public class MeuJogo extends Game implements InputProcessor, ControllerListener 
 	
 	@Override
 	public void create () {
+		Bullet.init();
 		assetManager  = new AssetManager();
 		assetManager.load("cenario.g3db",Model.class);
 		assetManager.load("xwing/xwing.g3db", Model.class);

@@ -1,6 +1,8 @@
 package br.edu.ufabc.games.projetofinal.model;
 
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 
 public class Nave {
 	private GameObject gameObject;
@@ -19,9 +21,12 @@ public class Nave {
 	private static final int DIREITA = 4;
 
 	private static final float ACELERACAO = 5f;
+	
+	public btCollisionShape shipShape;
 
 	public Nave () {
-		gameObject = new GameObject(ModelFactory.getModelbyName("NAVE"));
+		shipShape = new btBoxShape(new Vector3(0.5f, 0.5f, 0.5f));
+		gameObject = new GameObject(ModelFactory.getModelbyName("NAVE"), shipShape);
 		gameObject.transform.scale(0.5f, 0.5f, 0.5f);
 		gameObject.transform.translate(0, 2, 0);
 		frente = new Vector3(0, 0, 20f);
