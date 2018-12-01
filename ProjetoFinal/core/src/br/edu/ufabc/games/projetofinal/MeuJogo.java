@@ -26,9 +26,9 @@ public class MeuJogo extends Game implements InputProcessor, ControllerListener 
 	public void create () {
 		Bullet.init();
 		assetManager  = new AssetManager();
-		assetManager.load("cenario.g3db",Model.class);
+		assetManager.load("skybox.g3db",Model.class);
 		assetManager.load("xwing/xwing.g3db", Model.class);
-		assetManager.load("planets/planet.g3db", Model.class);
+		assetManager.load("planets/planet_ako.g3db", Model.class);
 		Gdx.input.setInputProcessor(this);
 		
 		currentScreen = new StartScreen("START");

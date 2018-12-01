@@ -8,22 +8,14 @@ import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
-import com.badlogic.gdx.physics.bullet.collision.CollisionObjectWrapper;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionAlgorithm;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionAlgorithmConstructionInfo;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionConfiguration;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionDispatcher;
-import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration;
-import com.badlogic.gdx.physics.bullet.collision.btDispatcher;
-import com.badlogic.gdx.physics.bullet.collision.btDispatcherInfo;
-import com.badlogic.gdx.physics.bullet.collision.btManifoldResult;
-import com.badlogic.gdx.physics.bullet.collision.btSphereBoxCollisionAlgorithm;
+import com.badlogic.gdx.utils.Array;
 
 import br.edu.ufabc.games.projetofinal.model.GameObject;
+import br.edu.ufabc.games.projetofinal.model.MassiveBody;
 import br.edu.ufabc.games.projetofinal.model.ModelFactory;
 import br.edu.ufabc.games.projetofinal.model.Nave;
-import br.edu.ufabc.games.projetofinal.model.Planeta;
 import br.edu.ufabc.games.projetofinal.util.ChasingCamera;
 import br.edu.ufabc.games.projetofinal.util.Commands;
 import br.edu.ufabc.games.projetofinal.util.Utils;
@@ -43,15 +35,17 @@ public class GameScreen extends AbstractScreen {
 	// elementos
 	private GameObject cenario;
 	private Nave nave;
-	private Planeta planeta;
-
-	// Bullet
-	btCollisionConfiguration collisionConfig;
-	btDispatcher dispatcher;
-
+	private MassiveBody planeta;
+	private MassiveBody planeta2;
+	private MassiveBody planeta3;
+	private Array<MassiveBody> bodies;
+	
+	public static float ORBITAL_VELOCITY = 0.2f;
+	
 	public GameScreen(String id) {
 		super(id);
 		Bullet.init();
+		bodies =  new Array<MassiveBody>();
 		viewMatrix = new Matrix4();
 		tranMatrix = new Matrix4();
 		spriteBatch = new SpriteBatch();
@@ -65,56 +59,54 @@ public class GameScreen extends AbstractScreen {
 		camera.setOffsetYIn(5);
 		camera.setOffsetYOut(5);
 
-		cenario = new GameObject(ModelFactory.getModelbyName("CENARIO"), null);
-		cenario.transform.scale(50, 1, 50);
+		cenario = new GameObject(ModelFactory.getModelbyName("CENARIO"));
+		cenario.transform.scale(500, 500, 500);
 		nave = new Nave();
 		nave.getCurrent().transform.translate(0, 10, 0);
-		planeta = new Planeta();
-		planeta.getCurrent().transform.translate(0, 5, 10);
-		nave.getCurrent().corpo.setWorldTransform(nave.getCurrent().transform);
-		planeta.getCurrent().corpo.setWorldTransform(planeta.getCurrent().transform);
+		
+		planeta = new MassiveBody();
+		planeta.setPosition(new Vector3(0,10,0));
+		planeta.setVelocity(new Vector3(0,0,0));
+		planeta.setMass(2E11f);
+		//planeta.getCurrent().transform.translate(0, 5, 10);
+		planeta.getCurrent().transform.scale(0.5f, 0.5f, 0.5f);
+		
+		planeta2 = new MassiveBody();
+		planeta2.setPosition(new Vector3(-10,10,4));
+		planeta2.setVelocity(new Vector3(-0.3f, 0, -0.2f));
+		planeta2.setMass(2E9f);
+		planeta2.getCurrent().transform.scale(0.3f, 0.3f, 0.3f);
+		
+		
+		planeta3 = new MassiveBody();
+		planeta3.setPosition(new Vector3(-10,7,1));
+		planeta3.setVelocity(new Vector3(-0.3f, 0, -0.5f));
+		planeta3.setMass(2E8f);
+		planeta3.getCurrent().transform.scale(0.2f, 0.2f, 0.2f);
+		
+		
+		bodies = new Array<MassiveBody>();
+		
+		bodies.add(planeta);
+		bodies.add(planeta2);
+		bodies.add(planeta3);
+		
 		camera.setObjectToFollow(nave.getCurrent());
-
-		collisionConfig = new btDefaultCollisionConfiguration();
-		dispatcher = new btCollisionDispatcher(collisionConfig);
 
 		camera.update();
 
 	}
 
-	boolean checkCollision() {
-		CollisionObjectWrapper co0 = new CollisionObjectWrapper(nave.getCurrent().corpo);
-		CollisionObjectWrapper co1 = new CollisionObjectWrapper(planeta.getCurrent().corpo);
-
-		btCollisionAlgorithmConstructionInfo ci = new btCollisionAlgorithmConstructionInfo();
-		ci.setDispatcher1(dispatcher);
-		btCollisionAlgorithm algorithm = new btSphereBoxCollisionAlgorithm(null, ci, co0.wrapper, co1.wrapper, false);
-
-		btDispatcherInfo info = new btDispatcherInfo();
-		btManifoldResult result = new btManifoldResult(co0.wrapper, co1.wrapper);
-
-		algorithm.processCollision(co0.wrapper, co1.wrapper, info, result);
-
-		boolean r = result.getPersistentManifold().getNumContacts() > 0;
-
-		result.dispose();
-		info.dispose();
-		algorithm.dispose();
-		ci.dispose();
-		co1.dispose();
-		co0.dispose();
-
-		return r;
-	}
 
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
 
 	}
-
+	
 	@Override
 	public void update(float delta) {
+	    
 		if (Commands.comandos[Commands.FRENTE]) {
 			nave.andarParaFrente();
 		}
@@ -132,11 +124,25 @@ public class GameScreen extends AbstractScreen {
 			nave.parar();
 		}
 		
+		updateBodies(delta);
 		nave.update(delta);
-		nave.getCurrent().corpo.setWorldTransform(nave.getCurrent().transform);
-		if(checkCollision()) {
-			System.out.println("Colidiu");
+		
+	}
+	
+	public void updateBodies(float delta) {
+		for(int i = 0; i < bodies.size; i++) {
+			MassiveBody a = bodies.get(i);
+			for(int j =0; j < bodies.size; j++) {
+				if(i == j) {
+					continue;
+				}
+				MassiveBody b = bodies.get(j);
+				a.applyForce(a.forceFrom(b), delta);
+				a.update(delta);
+				b.update(delta);
+			}
 		}
+		
 	}
 
 	@Override
@@ -147,6 +153,8 @@ public class GameScreen extends AbstractScreen {
 			modelBatch.begin(camera);
 			modelBatch.render(cenario, environment);
 			modelBatch.render(planeta.getCurrent(), environment);
+			modelBatch.render(planeta2.getCurrent(), environment);
+			modelBatch.render(planeta3.getCurrent(), environment);
 			modelBatch.render(nave.getCurrent(), environment);
 			modelBatch.end();
 			camera.update();

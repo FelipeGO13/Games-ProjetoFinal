@@ -23,10 +23,11 @@ public class Nave {
 	private static final float ACELERACAO = 5f;
 	
 	public btCollisionShape shipShape;
+	public boolean onGravity;
 
 	public Nave () {
 		shipShape = new btBoxShape(new Vector3(0.5f, 0.5f, 0.5f));
-		gameObject = new GameObject(ModelFactory.getModelbyName("NAVE"), shipShape);
+		gameObject = new GameObject(ModelFactory.getModelbyName("NAVE"));
 		gameObject.transform.scale(0.5f, 0.5f, 0.5f);
 		gameObject.transform.translate(0, 2, 0);
 		frente = new Vector3(0, 0, 20f);
@@ -34,6 +35,7 @@ public class Nave {
 		esquerda = new Vector3(20f, 0, 0);
 		direita = new Vector3(-20f, 0, 0);
 		velocidade = new Vector3();
+		onGravity = false;
 	}
 
 	public void andarParaFrente() {

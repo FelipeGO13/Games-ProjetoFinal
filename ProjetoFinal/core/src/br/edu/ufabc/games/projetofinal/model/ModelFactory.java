@@ -17,9 +17,9 @@ public class ModelFactory {
 		ModelLoader<ModelParameters> loader;
 		loader = new G3dModelLoader(new UBJsonReader());
 		System.out.println("Carregando modelos...");
-		modelos.put("CENARIO", loader.loadModel(Gdx.files.internal("cenario.g3db")));
+		modelos.put("CENARIO", loader.loadModel(Gdx.files.internal("skybox.g3db")));
 		modelos.put("NAVE", loader.loadModel(Gdx.files.internal("xwing/xwing.g3db")));
-		modelos.put("PLANETA1", loader.loadModel(Gdx.files.internal("planets/planet.g3db")));
+		modelos.put("PLANETA1", loader.loadModel(Gdx.files.internal("planets/planet_ako.g3db")));
 		System.out.println("Modelos carregados!");
 	}
 
