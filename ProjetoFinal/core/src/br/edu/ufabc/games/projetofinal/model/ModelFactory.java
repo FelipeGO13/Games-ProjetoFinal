@@ -19,7 +19,12 @@ public class ModelFactory {
 		System.out.println("Carregando modelos...");
 		modelos.put("CENARIO", loader.loadModel(Gdx.files.internal("skybox.g3db")));
 		modelos.put("NAVE", loader.loadModel(Gdx.files.internal("xwing/xwing.g3db")));
+		modelos.put("SUN", loader.loadModel(Gdx.files.internal("planets/sun.g3db")));
 		modelos.put("PLANETA1", loader.loadModel(Gdx.files.internal("planets/planet_ako.g3db")));
+		modelos.put("PLANETA2", loader.loadModel(Gdx.files.internal("planets/planet_dante.g3db")));
+		modelos.put("PLANETA3", loader.loadModel(Gdx.files.internal("planets/planet_down.g3db")));
+		modelos.put("PLANETA4", loader.loadModel(Gdx.files.internal("planets/planet_dust.g3db")));
+		modelos.put("PLANETA5", loader.loadModel(Gdx.files.internal("planets/planet_reststop.g3db")));
 		System.out.println("Modelos carregados!");
 	}
 

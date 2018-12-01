@@ -16,8 +16,8 @@ public class MassiveBody {
 	private GameObject obj;
 	private BoundingBox boundingBox;
 	
-	public MassiveBody() {
-		obj = new GameObject(ModelFactory.getModelbyName("PLANETA1"));
+	public MassiveBody(String planetType) {
+		obj = new GameObject(ModelFactory.getModelbyName(planetType));
 		acceleration = new Vector3();
 		tmp = new Vector3();
 		center = new Vector3();
@@ -39,7 +39,7 @@ public class MassiveBody {
 	}
 	
 	public void applyForce(Vector3 f, float dt) {
-		acceleration.set(f).scl(1 / mass);
+		acceleration.set(f).scl(2 / mass); // define tamanho da orbita e aceleracao dos corpos
 		velocity.add(tmp.set(acceleration).scl(dt));
 		position.add(tmp.set(velocity).scl(dt));
 

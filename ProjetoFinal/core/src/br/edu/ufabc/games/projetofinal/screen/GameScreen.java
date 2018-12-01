@@ -1,5 +1,7 @@
 package br.edu.ufabc.games.projetofinal.screen;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -12,6 +14,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.utils.Array;
 
+import br.edu.ufabc.games.projetofinal.model.Bodies;
 import br.edu.ufabc.games.projetofinal.model.GameObject;
 import br.edu.ufabc.games.projetofinal.model.MassiveBody;
 import br.edu.ufabc.games.projetofinal.model.ModelFactory;
@@ -35,9 +38,6 @@ public class GameScreen extends AbstractScreen {
 	// elementos
 	private GameObject cenario;
 	private Nave nave;
-	private MassiveBody planeta;
-	private MassiveBody planeta2;
-	private MassiveBody planeta3;
 	private Array<MassiveBody> bodies;
 	
 	public static float ORBITAL_VELOCITY = 0.2f;
@@ -53,7 +53,7 @@ public class GameScreen extends AbstractScreen {
 		bitmapFont = new BitmapFont(Gdx.files.internal("fonts/space.fnt"));
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 1, 1, 1, 1));
-		camera = new ChasingCamera(67.0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), -10, -10);
+		camera = new ChasingCamera(67.0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), -10, -8);
 		camera.near = 0.01f;
 		camera.far = 1000f;
 		camera.setOffsetYIn(5);
@@ -63,33 +63,24 @@ public class GameScreen extends AbstractScreen {
 		cenario.transform.scale(500, 500, 500);
 		nave = new Nave();
 		nave.getCurrent().transform.translate(0, 10, 0);
-		
-		planeta = new MassiveBody();
-		planeta.setPosition(new Vector3(0,10,0));
-		planeta.setVelocity(new Vector3(0,0,0));
-		planeta.setMass(2E11f);
-		//planeta.getCurrent().transform.translate(0, 5, 10);
-		planeta.getCurrent().transform.scale(0.5f, 0.5f, 0.5f);
-		
-		planeta2 = new MassiveBody();
-		planeta2.setPosition(new Vector3(-10,10,4));
-		planeta2.setVelocity(new Vector3(-0.3f, 0, -0.2f));
-		planeta2.setMass(2E9f);
-		planeta2.getCurrent().transform.scale(0.3f, 0.3f, 0.3f);
+		nave.getCurrent().transform.scale(0.5f, 0.5f, 0.5f);
 		
 		
-		planeta3 = new MassiveBody();
-		planeta3.setPosition(new Vector3(-10,7,1));
-		planeta3.setVelocity(new Vector3(-0.3f, 0, -0.5f));
-		planeta3.setMass(2E8f);
-		planeta3.getCurrent().transform.scale(0.2f, 0.2f, 0.2f);
 		
+		Random rnd = new Random();
 		
-		bodies = new Array<MassiveBody>();
+		MassiveBody sun = new MassiveBody("SUN");
+		sun.setPosition(Bodies.SUN.getPos());
+		sun.setVelocity(Bodies.SUN.getVel());
+		sun.setMass(Bodies.SUN.getMass());
+		sun.getCurrent().transform.scale(Bodies.SUN.getScale(), Bodies.SUN.getScale(), Bodies.SUN.getScale());
 		
-		bodies.add(planeta);
-		bodies.add(planeta2);
-		bodies.add(planeta3);
+		bodies.add(sun);
+		int numPlanets = rnd.nextInt((5 - 1) + 1);
+		System.out.println("Numero satelites: " + (numPlanets + 1));
+		for(int i = 0; i < numPlanets + 1; i++) {
+			createBody(i);
+		}
 		
 		camera.setObjectToFollow(nave.getCurrent());
 
@@ -129,6 +120,16 @@ public class GameScreen extends AbstractScreen {
 		
 	}
 	
+	public void createBody(int id) {
+		MassiveBody planeta = new MassiveBody(Bodies.getById(id).getModel());
+		
+		planeta.setPosition(Bodies.getById(id).getPos());
+		planeta.setVelocity(Bodies.getById(id).getVel());
+		planeta.setMass(Bodies.getById(id).getMass());
+		planeta.getCurrent().transform.scale(Bodies.getById(id).getScale(), Bodies.getById(id).getScale(), Bodies.getById(id).getScale());
+		bodies.add(planeta);
+	}
+	
 	public void updateBodies(float delta) {
 		for(int i = 0; i < bodies.size; i++) {
 			MassiveBody a = bodies.get(i);
@@ -152,9 +153,10 @@ public class GameScreen extends AbstractScreen {
 		if (nave != null) {
 			modelBatch.begin(camera);
 			modelBatch.render(cenario, environment);
-			modelBatch.render(planeta.getCurrent(), environment);
-			modelBatch.render(planeta2.getCurrent(), environment);
-			modelBatch.render(planeta3.getCurrent(), environment);
+			for(MassiveBody mb : bodies) {
+				modelBatch.render(mb.getCurrent(), environment);
+			}
+			
 			modelBatch.render(nave.getCurrent(), environment);
 			modelBatch.end();
 			camera.update();
