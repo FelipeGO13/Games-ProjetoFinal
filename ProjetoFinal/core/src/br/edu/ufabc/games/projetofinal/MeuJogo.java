@@ -62,12 +62,16 @@ public class MeuJogo extends Game implements InputProcessor, ControllerListener 
 	public boolean keyDown(int keycode) {
 		
 		// TODO Auto-generated method stub
-		if (keycode == Input.Keys.UP) {
+		if (keycode == Input.Keys.SPACE) {
 			Commands.comandos[Commands.FRENTE] = true;
 			return true;
 		}
+		if (keycode == Input.Keys.UP) {
+			Commands.comandos[Commands.CIMA] = true;
+			return true;
+		}
 		if (keycode == Input.Keys.DOWN) {
-			Commands.comandos[Commands.TRAS] = true;
+			Commands.comandos[Commands.BAIXO] = true;
 			return true;
 		}
 		if (keycode == Input.Keys.LEFT) {
@@ -79,11 +83,11 @@ public class MeuJogo extends Game implements InputProcessor, ControllerListener 
 			return true;
 		}
 		if (keycode == Input.Keys.W) {
-			Commands.comandos[Commands.FRENTE] = true;
+			Commands.comandos[Commands.CIMA] = true;
 			return true;
 		}
 		if (keycode == Input.Keys.S) {
-			Commands.comandos[Commands.TRAS] = true;
+			Commands.comandos[Commands.BAIXO] = true;
 			return true;
 		}
 		if (keycode == Input.Keys.A) {
@@ -100,12 +104,16 @@ public class MeuJogo extends Game implements InputProcessor, ControllerListener 
 	@Override
 	public boolean keyUp(int keycode) {
 		// TODO Auto-generated method stub
-		if (keycode == Input.Keys.UP) {
+		if (keycode == Input.Keys.SPACE) {
 			Commands.comandos[Commands.FRENTE] = false;
 			return true;
 		}
+		if (keycode == Input.Keys.UP) {
+			Commands.comandos[Commands.CIMA] = false;
+			return true;
+		}
 		if (keycode == Input.Keys.DOWN) {
-			Commands.comandos[Commands.TRAS] = false;
+			Commands.comandos[Commands.BAIXO] = false;
 			return true;
 		}
 		if (keycode == Input.Keys.LEFT) {
@@ -117,11 +125,11 @@ public class MeuJogo extends Game implements InputProcessor, ControllerListener 
 			return true;
 		}
 		if (keycode == Input.Keys.W) {
-			Commands.comandos[Commands.FRENTE] = false;
+			Commands.comandos[Commands.CIMA] = false;
 			return true;
 		}
 		if (keycode == Input.Keys.S) {
-			Commands.comandos[Commands.TRAS] = false;
+			Commands.comandos[Commands.BAIXO] = false;
 			return true;
 		}
 		if (keycode == Input.Keys.A) {

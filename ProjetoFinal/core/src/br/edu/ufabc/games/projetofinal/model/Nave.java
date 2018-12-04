@@ -18,6 +18,8 @@ public class Nave {
 	private static final int TRAS = 2;
 	private static final int ESQUERDA = 3;
 	private static final int DIREITA = 4;
+	public static final int CIMA = 5;
+	public static final int BAIXO  = 6;
 
 	private static final float ACELERACAO = 5f;
 	private BoundingBox boundingBox;
@@ -51,6 +53,12 @@ public class Nave {
 	public void andarParaEsquerda() {
 		direcao = ESQUERDA;
 	}
+	public void andarParaCima() {
+		direcao = CIMA;
+	}
+	public void andarParaBaixo() {
+		direcao = BAIXO;
+	}
 	public void parar() {
 		direcao = PARADO;
 	}
@@ -75,11 +83,38 @@ public class Nave {
 			gameObject.transform.translate(tras.cpy().scl(delta));
 		}
 		if (direcao == ESQUERDA) {
-			gameObject.transform.translate(esquerda.cpy().scl(delta));
+			gameObject.transform.rotate(Vector3.Y, 1);
+			velocidade.z -= ACELERACAO * delta;
+			if (velocidade.z <= 0.0f) {
+				velocidade.z = 0;
+			}
+			gameObject.transform.translate(velocidade);
 		}
 		if (direcao == DIREITA) {
-			gameObject.transform.translate(direita.cpy().scl(delta));
+			gameObject.transform.rotate(Vector3.Y, -1);
+			velocidade.z -= ACELERACAO * delta;
+			if (velocidade.z <= 0.0f) {
+				velocidade.z = 0;
+			}
+			gameObject.transform.translate(velocidade);
 		}
+		if (direcao == CIMA) {
+			gameObject.transform.rotate(Vector3.X, -1);
+			velocidade.z -= ACELERACAO * delta;
+			if (velocidade.z <= 0.0f) {
+				velocidade.z = 0;
+			}
+			gameObject.transform.translate(velocidade);
+		}
+		if (direcao == BAIXO) {
+			gameObject.transform.rotate(Vector3.X, 1);
+			velocidade.z -= ACELERACAO * delta;
+			if (velocidade.z <= 0.0f) {
+				velocidade.z = 0;
+			}
+			gameObject.transform.translate(velocidade);
+		}
+	
 	}
 
 	public GameObject getCurrent() {
