@@ -26,6 +26,7 @@ public class Nave {
 	public btCollisionShape shipShape;
 	
 	public boolean onGravity;
+	public float fuel;
 
 	public Nave () {
 		shipShape = new btBoxShape(new Vector3(0.5f, 0.5f, 0.5f));
@@ -38,6 +39,8 @@ public class Nave {
 		direita = new Vector3(-20f, 0, 0);
 		velocidade = new Vector3();
 		onGravity = false;
+		fuel = 100f;
+		gameObject.setMass(0.05f);
 	}
 
 	public void andarParaFrente() {
@@ -66,12 +69,18 @@ public class Nave {
 	}
 
 	public void update(float delta) {
+		
+		if(onGravity) {
+			System.out.println("Gravidade");
+		}
+		
+		
 		if (direcao == FRENTE) {
+			
 			velocidade.z += ACELERACAO * delta;
 			if (velocidade.z >= 8f)
 				velocidade.z = 8;
 			gameObject.transform.translate(velocidade);
-			
 		}
 		if (direcao == PARADO) {
 			velocidade.z -= ACELERACAO * delta;
@@ -79,7 +88,6 @@ public class Nave {
 				velocidade.z = 0;
 			}
 			gameObject.transform.translate(velocidade);
-			
 		}
 		if (direcao == TRAS) {
 			gameObject.transform.translate(tras.cpy().scl(delta));
@@ -118,6 +126,8 @@ public class Nave {
 			}
 			gameObject.transform.translate(velocidade);
 		}
+
+		
 	
 	}
 

@@ -2,6 +2,7 @@ package br.edu.ufabc.games.projetofinal.screen;
 
 import java.util.Random;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.collision.CollisionObjectWrapper;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionAlgorithm;
@@ -47,7 +49,7 @@ public class GameScreen extends AbstractScreen {
 	// elementos
 	private GameObject cenario;
 	private Nave nave;
-	private Array<MassiveBody> bodies;
+	private Array<GameObject> bodies;
 
 	public static float ORBITAL_VELOCITY = 0.2f;
 
@@ -58,7 +60,7 @@ public class GameScreen extends AbstractScreen {
 	public GameScreen(String id) {
 		super(id);
 		Bullet.init();
-		bodies = new Array<MassiveBody>();
+		bodies = new Array<GameObject>();
 		viewMatrix = new Matrix4();
 		tranMatrix = new Matrix4();
 		spriteBatch = new SpriteBatch();
@@ -81,12 +83,12 @@ public class GameScreen extends AbstractScreen {
 		Random rnd = new Random();
 
 		MassiveBody sun = new MassiveBody("SUN");
-		sun.setPosition(Bodies.SUN.getPos());
-		sun.setVelocity(Bodies.SUN.getVel());
-		sun.setMass(Bodies.SUN.getMass());
+		sun.getCurrent().setPosition(Bodies.SUN.getPos());
+		sun.getCurrent().setVelocity(Bodies.SUN.getVel());
+		sun.getCurrent().setMass(Bodies.SUN.getMass());
 		sun.getCurrent().transform.scale(Bodies.SUN.getScale(), Bodies.SUN.getScale(), Bodies.SUN.getScale());
 
-		bodies.add(sun);
+		bodies.add(sun.getCurrent());
 		int numPlanets = rnd.nextInt((5 - 1) + 1);
 		System.out.println("Numero satelites: " + (numPlanets + 1));
 		for (int i = 0; i < numPlanets + 1; i++) {
@@ -101,9 +103,9 @@ public class GameScreen extends AbstractScreen {
 
 	}
 	
-	boolean checkCollision() {
+	boolean checkCollision(GameObject b) {
 		CollisionObjectWrapper co0 = new CollisionObjectWrapper(nave.getCurrent().corpo);
-		CollisionObjectWrapper co1 = new CollisionObjectWrapper(bodies.get(0).getCurrent().corpo);
+		CollisionObjectWrapper co1 = new CollisionObjectWrapper(b.corpo);
 
 		btCollisionAlgorithmConstructionInfo ci = new btCollisionAlgorithmConstructionInfo();
 		ci.setDispatcher1(dispatcher);
@@ -135,7 +137,7 @@ public class GameScreen extends AbstractScreen {
 
 	@Override
 	public void update(float delta) {
-
+		
 		if (Commands.comandos[Commands.FRENTE]) {
 			nave.andarParaFrente();
 		}
@@ -163,35 +165,42 @@ public class GameScreen extends AbstractScreen {
 		updateBodies(delta);
 		nave.update(delta);
 		nave.getCurrent().corpo.setWorldTransform(nave.getCurrent().transform);
-		if(checkCollision()) {
-			System.out.println("Colidiu");
+		
+		for(GameObject b: bodies) {
+			if(checkCollision(b)) {
+				nave.onGravity = true;
+				break;
+			} else {
+				nave.onGravity = false;
+			}
 		}
+		
 	}
 
 	public void createBody(int id) {
-		MassiveBody planeta = new MassiveBody(Bodies.getById(id).getModel());
+		MassiveBody mb = new MassiveBody(Bodies.getById(id).getModel());
 
-		planeta.setPosition(Bodies.getById(id).getPos());
-		planeta.setVelocity(Bodies.getById(id).getVel());
-		planeta.setMass(Bodies.getById(id).getMass());
-		planeta.getCurrent().transform.scale(Bodies.getById(id).getScale(), Bodies.getById(id).getScale(),
+		mb.getCurrent().setPosition(Bodies.getById(id).getPos());
+		mb.getCurrent().setVelocity(Bodies.getById(id).getVel());
+		mb.getCurrent().setMass(Bodies.getById(id).getMass());
+		mb.getCurrent().transform.scale(Bodies.getById(id).getScale(), Bodies.getById(id).getScale(),
 				Bodies.getById(id).getScale());
-		bodies.add(planeta);
+		bodies.add(mb.getCurrent());
 	}
 
 	public void updateBodies(float delta) {
 		for (int i = 0; i < bodies.size; i++) {
-			MassiveBody a = bodies.get(i);
+			GameObject a = bodies.get(i);
 			for (int j = 0; j < bodies.size; j++) {
 				if (i == j) {
 					continue;
 				}
-				MassiveBody b = bodies.get(j);
+				GameObject b = bodies.get(j);
 				a.applyForce(a.forceFrom(b), delta);
 				a.update(delta);
 				b.update(delta);
-				a.getCurrent().corpo.setWorldTransform(a.getCurrent().transform);
-				b.getCurrent().corpo.setWorldTransform(b.getCurrent().transform);
+				a.corpo.setWorldTransform(a.transform);
+				b.corpo.setWorldTransform(b.transform);
 			}
 		}
 
@@ -204,8 +213,8 @@ public class GameScreen extends AbstractScreen {
 		if (nave != null) {
 			modelBatch.begin(camera);
 			modelBatch.render(cenario, environment);
-			for (MassiveBody mb : bodies) {
-				modelBatch.render(mb.getCurrent(), environment);
+			for (GameObject mb : bodies) {
+				modelBatch.render(mb, environment);
 			}
 
 			modelBatch.render(nave.getCurrent(), environment);
@@ -218,7 +227,9 @@ public class GameScreen extends AbstractScreen {
 		spriteBatch.setTransformMatrix(tranMatrix);
 		spriteBatch.begin();
 
-		bitmapFont.draw(spriteBatch, "Vel " + (int) nave.velocidade.z, 10, 450);
+		bitmapFont.draw(spriteBatch, "Energy " + (int) nave.fuel, 10, 550);
+		if(nave.onGravity)
+			bitmapFont.draw(spriteBatch, "On gravity!", 650, 550);
 		spriteBatch.end();
 
 	}

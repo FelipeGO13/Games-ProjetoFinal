@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.model.Animation;
 import com.badlogic.gdx.graphics.g3d.utils.AnimationController;
 import com.badlogic.gdx.graphics.g3d.utils.AnimationController.AnimationDesc;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 
@@ -14,6 +15,11 @@ public class GameObject extends ModelInstance {
 	private boolean done;
 	private float angle=0f;
 	public final btCollisionObject corpo;
+	public Vector3 position;
+	public Vector3 velocity;
+	public float mass;
+	public Vector3 acceleration;
+	public Vector3 tmp;
 
 	public GameObject(Model model,  btCollisionShape shape) {
 		super(model);
@@ -21,7 +27,8 @@ public class GameObject extends ModelInstance {
 		corpo = new btCollisionObject();
 		corpo.setCollisionShape(shape);
 		corpo.setWorldTransform(this.transform);
-		
+		acceleration = new Vector3();
+		tmp = new Vector3();
 		/* modo debug */
 		System.out.println("Animacoes = " + animations.size);
 		for (Animation a : animations) {
@@ -46,6 +53,24 @@ public class GameObject extends ModelInstance {
 						}
 					});
 		}
+	}
+	
+	public Vector3 forceFrom(GameObject other) {
+		float G = 6.674E-11f; // N*m^2/kg^2
+		float m1 = this.mass;
+		float m2 = other.mass;
+		Vector3 dr = tmp.set(other.position).sub(this.position);
+		float l = dr.len();
+		return dr.scl(G * m1 * m2 / (l * l * l));
+	}
+	
+	public void applyForce(Vector3 f, float dt) {
+		acceleration.set(f).scl(2 / mass); // define tamanho da orbita e aceleracao dos corpos
+		velocity.add(tmp.set(acceleration).scl(dt));
+		position.add(tmp.set(velocity).scl(dt));
+
+		this.transform.setTranslation(position);
+		this.calculateTransforms();
 	}
 	
 	public void setAngle(float angle) {
@@ -74,6 +99,46 @@ public class GameObject extends ModelInstance {
 	
 	public btCollisionObject getCorpo() {
 		return corpo;
+	}
+
+	public Vector3 getPosition() {
+		return position;
+	}
+
+	public void setPosition(Vector3 position) {
+		this.position = position;
+	}
+
+	public Vector3 getVelocity() {
+		return velocity;
+	}
+
+	public void setVelocity(Vector3 velocity) {
+		this.velocity = velocity;
+	}
+
+	public float getMass() {
+		return mass;
+	}
+
+	public void setMass(float mass) {
+		this.mass = mass;
+	}
+
+	public Vector3 getAcceleration() {
+		return acceleration;
+	}
+
+	public void setAcceleration(Vector3 acceleration) {
+		this.acceleration = acceleration;
+	}
+
+	public Vector3 getTmp() {
+		return tmp;
+	}
+
+	public void setTmp(Vector3 tmp) {
+		this.tmp = tmp;
 	}
 
 }
