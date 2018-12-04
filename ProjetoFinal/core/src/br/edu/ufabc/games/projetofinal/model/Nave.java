@@ -1,7 +1,8 @@
 package br.edu.ufabc.games.projetofinal.model;
 
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.BoundingBox;
+import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 
 public class Nave {
 	private GameObject gameObject;
@@ -22,12 +23,13 @@ public class Nave {
 	public static final int BAIXO  = 6;
 
 	private static final float ACELERACAO = 5f;
-	private BoundingBox boundingBox;
+	public btCollisionShape shipShape;
 	
 	public boolean onGravity;
 
 	public Nave () {
-		gameObject = new GameObject(ModelFactory.getModelbyName("NAVE"));
+		shipShape = new btBoxShape(new Vector3(0.5f, 0.5f, 0.5f));
+		gameObject = new GameObject(ModelFactory.getModelbyName("NAVE"), shipShape);
 		gameObject.transform.scale(0.5f, 0.5f, 0.5f);
 		gameObject.transform.translate(0, 2, 0);
 		frente = new Vector3(0, 0, 20f);
@@ -89,6 +91,7 @@ public class Nave {
 				velocidade.z = 0;
 			}
 			gameObject.transform.translate(velocidade);
+			gameObject.setAngle(1);
 		}
 		if (direcao == DIREITA) {
 			gameObject.transform.rotate(Vector3.Y, -1);
@@ -97,6 +100,7 @@ public class Nave {
 				velocidade.z = 0;
 			}
 			gameObject.transform.translate(velocidade);
+			gameObject.setAngle(-1);
 		}
 		if (direcao == CIMA) {
 			gameObject.transform.rotate(Vector3.X, -1);

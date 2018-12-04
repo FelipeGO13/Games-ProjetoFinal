@@ -13,11 +13,15 @@ public class GameObject extends ModelInstance {
 	private AnimationController animationController;
 	private boolean done;
 	private float angle=0f;
+	public final btCollisionObject corpo;
 
-	public GameObject(Model model) {
+	public GameObject(Model model,  btCollisionShape shape) {
 		super(model);
 		done = false;
-
+		corpo = new btCollisionObject();
+		corpo.setCollisionShape(shape);
+		corpo.setWorldTransform(this.transform);
+		
 		/* modo debug */
 		System.out.println("Animacoes = " + animations.size);
 		for (Animation a : animations) {
@@ -68,4 +72,8 @@ public class GameObject extends ModelInstance {
 		this.done = done;
 	}
 	
+	public btCollisionObject getCorpo() {
+		return corpo;
+	}
+
 }

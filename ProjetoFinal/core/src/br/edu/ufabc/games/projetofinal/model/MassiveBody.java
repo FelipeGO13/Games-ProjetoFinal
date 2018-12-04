@@ -1,7 +1,8 @@
 package br.edu.ufabc.games.projetofinal.model;
 
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.BoundingBox;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
+import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
 
 public class MassiveBody {
 	
@@ -14,20 +15,24 @@ public class MassiveBody {
 	public Vector3 dimensions;
 	
 	private GameObject obj;
-	private BoundingBox boundingBox;
+	//private BoundingBox boundingBox;
+	btCollisionShape sphereShape;
 	
 	public MassiveBody(String planetType) {
-		obj = new GameObject(ModelFactory.getModelbyName(planetType));
+		sphereShape = new btSphereShape(3.0f);
+		obj = new GameObject(ModelFactory.getModelbyName(planetType), sphereShape);
 		acceleration = new Vector3();
 		tmp = new Vector3();
 		center = new Vector3();
 		dimensions = new Vector3();
-		boundingBox = new BoundingBox();
-		obj.calculateBoundingBox(boundingBox);
-		boundingBox.getCenter(center);
-		boundingBox.getDimensions(dimensions);
+//		boundingBox = new BoundingBox();
+//		obj.calculateBoundingBox(boundingBox);
+//		boundingBox.getCenter(center);
+//		boundingBox.getDimensions(dimensions);
+	
 		
 	}
+	
 	
 	public Vector3 forceFrom(MassiveBody other) {
 		float G = 6.674E-11f; // N*m^2/kg^2
