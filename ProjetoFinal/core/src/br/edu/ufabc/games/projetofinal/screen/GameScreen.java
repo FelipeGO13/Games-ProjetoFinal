@@ -37,7 +37,7 @@ public class GameScreen extends AbstractScreen {
 	// parte 3D
 	private ModelBatch modelBatch;
 	private Environment environment;
-	private ChasingCamera camera;
+	//private ChasingCamera camera;
 	private BitmapFont bitmapFont;
 
 	// elementos
@@ -59,11 +59,11 @@ public class GameScreen extends AbstractScreen {
 		bitmapFont = new BitmapFont(Gdx.files.internal("fonts/space.fnt"));
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 1, 1, 1, 1));
-		camera = new ChasingCamera(67.0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), -10, -10);
-		camera.near = 0.01f;
-		camera.far = 1000f;
-		camera.setOffsetYIn(5);
-		camera.setOffsetYOut(5);
+		//camera = new ChasingCamera(67.0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), -10, -10);
+		//camera.near = 0.01f;
+		//camera.far = 1000f;
+		//camera.setOffsetYIn(5);
+		//camera.setOffsetYOut(5);
 
 		cenario = new GameObject(ModelFactory.getModelbyName("CENARIO"), null);
 		cenario.transform.scale(50, 1, 50);
@@ -73,12 +73,12 @@ public class GameScreen extends AbstractScreen {
 		planeta.getCurrent().transform.translate(0, 5, 10);
 		nave.getCurrent().corpo.setWorldTransform(nave.getCurrent().transform);
 		planeta.getCurrent().corpo.setWorldTransform(planeta.getCurrent().transform);
-		camera.setObjectToFollow(nave.getCurrent());
+		//camera.setObjectToFollow(nave.getCurrent());
 
 		collisionConfig = new btDefaultCollisionConfiguration();
 		dispatcher = new btCollisionDispatcher(collisionConfig);
 
-		camera.update();
+		//camera.update();
 
 	}
 
@@ -131,6 +131,15 @@ public class GameScreen extends AbstractScreen {
 				&& !Commands.comandos[Commands.ESQUERDA] && !Commands.comandos[Commands.DIREITA]) {
 			nave.parar();
 		}
+		if (Commands.comandos[Commands.INCLINANDO_ESQUERDA]) {
+			nave.inclinarParaEsquerda();
+		}
+		if (Commands.comandos[Commands.INCLINANDO_DIREITA]) {
+			nave.inclinarParaDireita();
+		}
+		if(!Commands.comandos[Commands.INCLINANDO_ESQUERDA] && !Commands.comandos[Commands.INCLINANDO_DIREITA]) {
+			nave.pararDeInclinar();
+		}
 		
 		nave.update(delta);
 		nave.getCurrent().corpo.setWorldTransform(nave.getCurrent().transform);
@@ -144,12 +153,12 @@ public class GameScreen extends AbstractScreen {
 		Gdx.gl.glClear(GL20.GL_DEPTH_BUFFER_BIT | GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glClearColor(0, 0, 0, 0);
 		if (nave != null) {
-			modelBatch.begin(camera);
+			modelBatch.begin(nave.camera);
 			modelBatch.render(cenario, environment);
 			modelBatch.render(planeta.getCurrent(), environment);
 			modelBatch.render(nave.getCurrent(), environment);
 			modelBatch.end();
-			camera.update();
+			nave.camera.update();
 		}
 
 		viewMatrix.setToOrtho2D(0, 0, Utils.GAME_WIDTH, Utils.GAME_HEIGHT);
