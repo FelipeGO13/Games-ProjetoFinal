@@ -19,6 +19,7 @@ public class ModelFactory {
 		System.out.println("Carregando modelos...");
 		modelos.put("CENARIO", loader.loadModel(Gdx.files.internal("cenario.g3db")));
 		modelos.put("NAVE", loader.loadModel(Gdx.files.internal("xwing/xwing.g3db")));
+		modelos.put("COCKPIT", loader.loadModel(Gdx.files.internal("xwing/cockpit.g3db")));
 		modelos.put("PLANETA1", loader.loadModel(Gdx.files.internal("planets/planet.g3db")));
 		System.out.println("Modelos carregados!");
 	}
