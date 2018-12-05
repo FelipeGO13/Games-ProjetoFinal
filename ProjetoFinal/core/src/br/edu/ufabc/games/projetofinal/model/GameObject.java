@@ -20,6 +20,7 @@ public class GameObject extends ModelInstance {
 	public float mass;
 	public Vector3 acceleration;
 	public Vector3 tmp;
+	public String bodyType;
 
 	public GameObject(Model model,  btCollisionShape shape) {
 		super(model);

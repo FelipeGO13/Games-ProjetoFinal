@@ -25,6 +25,7 @@ public class ModelFactory {
 		modelos.put("PLANETA3", loader.loadModel(Gdx.files.internal("planets/planet_down.g3db")));
 		modelos.put("PLANETA4", loader.loadModel(Gdx.files.internal("planets/planet_dust.g3db")));
 		modelos.put("PLANETA5", loader.loadModel(Gdx.files.internal("planets/planet_reststop.g3db")));
+		modelos.put("OBJETIVO", loader.loadModel(Gdx.files.internal("mothership/mothership.g3db")));
 		System.out.println("Modelos carregados!");
 	}
 

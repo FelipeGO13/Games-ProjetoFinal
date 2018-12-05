@@ -1,6 +1,5 @@
 package br.edu.ufabc.games.projetofinal.model;
 
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
 
@@ -13,7 +12,7 @@ public class MassiveBody {
 	public MassiveBody(String planetType) {
 		sphereShape = new btSphereShape(3.0f);
 		obj = new GameObject(ModelFactory.getModelbyName(planetType), sphereShape);
-		
+		obj.bodyType = planetType;
 	}
 	
 	public void update(float delta) {

@@ -27,7 +27,9 @@ public class Nave {
 	
 	public boolean onGravity;
 	public float fuel;
-
+	private Vector3 lastPosition;
+	private Vector3 newPosition;
+	
 	public Nave () {
 		shipShape = new btBoxShape(new Vector3(0.5f, 0.5f, 0.5f));
 		gameObject = new GameObject(ModelFactory.getModelbyName("NAVE"), shipShape);
@@ -40,7 +42,8 @@ public class Nave {
 		velocidade = new Vector3();
 		onGravity = false;
 		fuel = 100f;
-		gameObject.setMass(0.05f);
+		newPosition = new Vector3(0,0,-450);
+		lastPosition = new Vector3(0, 0, -450);
 	}
 
 	public void andarParaFrente() {
@@ -70,13 +73,15 @@ public class Nave {
 
 	public void update(float delta) {
 		
-		if(onGravity) {
+		if(onGravity && fuel < 100) {
 			System.out.println("Gravidade");
+			fuel += 1;
 		}
 		
 		
 		if (direcao == FRENTE) {
-			
+			gameObject.transform.getTranslation(newPosition);
+			System.out.println(newPosition);
 			velocidade.z += ACELERACAO * delta;
 			if (velocidade.z >= 8f)
 				velocidade.z = 8;
@@ -88,11 +93,14 @@ public class Nave {
 				velocidade.z = 0;
 			}
 			gameObject.transform.translate(velocidade);
+			gameObject.transform.getTranslation(lastPosition);
+			gameObject.transform.getTranslation(newPosition);
 		}
 		if (direcao == TRAS) {
 			gameObject.transform.translate(tras.cpy().scl(delta));
 		}
 		if (direcao == ESQUERDA) {
+			
 			gameObject.transform.rotate(Vector3.Y, 1);
 			velocidade.z -= ACELERACAO * delta;
 			if (velocidade.z <= 0.0f) {
@@ -127,8 +135,11 @@ public class Nave {
 			gameObject.transform.translate(velocidade);
 		}
 
-		
-	
+		float diff = lastPosition.dst(newPosition);
+		System.out.println(diff);
+		if(diff > 10) {
+			fuel -= 1;
+		}
 	}
 
 	public GameObject getCurrent() {

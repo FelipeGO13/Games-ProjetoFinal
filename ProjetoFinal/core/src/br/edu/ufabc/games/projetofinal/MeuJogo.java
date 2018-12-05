@@ -34,6 +34,7 @@ public class MeuJogo extends Game implements InputProcessor, ControllerListener 
 		assetManager.load("planets/planet_down.g3db", Model.class);
 		assetManager.load("planets/planet_dust.g3db", Model.class);
 		assetManager.load("planets/planet_reststop.g3db", Model.class);
+		assetManager.load("mothership/mothership.g3db", Model.class);
 		Gdx.input.setInputProcessor(this);
 		
 		currentScreen = new StartScreen("START");

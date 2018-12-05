@@ -2,7 +2,6 @@ package br.edu.ufabc.games.projetofinal.screen;
 
 import java.util.Random;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -14,6 +13,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.collision.CollisionObjectWrapper;
+import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionAlgorithm;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionAlgorithmConstructionInfo;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionConfiguration;
@@ -48,6 +48,7 @@ public class GameScreen extends AbstractScreen {
 
 	// elementos
 	private GameObject cenario;
+	private GameObject objetivo;
 	private Nave nave;
 	private Array<GameObject> bodies;
 
@@ -76,8 +77,14 @@ public class GameScreen extends AbstractScreen {
 
 		cenario = new GameObject(ModelFactory.getModelbyName("CENARIO"), null);
 		cenario.transform.scale(500, 500, 500);
+		
+		objetivo = new GameObject(ModelFactory.getModelbyName("OBJETIVO"),  new btBoxShape(new Vector3(10f, 10f, 10f)));
+		objetivo.transform.scale(100, 100, 100);
+		objetivo.transform.translate(0, 100, 100);
+		
+		
 		nave = new Nave();
-		nave.getCurrent().transform.translate(0, 10, 0);
+		nave.getCurrent().transform.translate(0, 0, -450);
 		nave.getCurrent().transform.scale(0.5f, 0.5f, 0.5f);
 
 		Random rnd = new Random();
@@ -167,7 +174,7 @@ public class GameScreen extends AbstractScreen {
 		nave.getCurrent().corpo.setWorldTransform(nave.getCurrent().transform);
 		
 		for(GameObject b: bodies) {
-			if(checkCollision(b)) {
+			if(checkCollision(b) && b.bodyType.equals("SUN")) {
 				nave.onGravity = true;
 				break;
 			} else {
@@ -185,7 +192,10 @@ public class GameScreen extends AbstractScreen {
 		mb.getCurrent().setMass(Bodies.getById(id).getMass());
 		mb.getCurrent().transform.scale(Bodies.getById(id).getScale(), Bodies.getById(id).getScale(),
 				Bodies.getById(id).getScale());
+
 		bodies.add(mb.getCurrent());
+		bodies.get(bodies.size-1).corpo.setWorldTransform(bodies.get(bodies.size-1).transform);
+		
 	}
 
 	public void updateBodies(float delta) {
@@ -213,6 +223,7 @@ public class GameScreen extends AbstractScreen {
 		if (nave != null) {
 			modelBatch.begin(camera);
 			modelBatch.render(cenario, environment);
+			modelBatch.render(objetivo, environment);
 			for (GameObject mb : bodies) {
 				modelBatch.render(mb, environment);
 			}
