@@ -56,6 +56,7 @@ public class GameObject extends ModelInstance {
 		}
 	}
 	
+
 	public Vector3 forceFrom(GameObject other) {
 		float G = 6.674E-11f; // N*m^2/kg^2
 		float m1 = this.mass;

@@ -10,10 +10,8 @@ import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.collision.CollisionObjectWrapper;
-import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionAlgorithm;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionAlgorithmConstructionInfo;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionConfiguration;
@@ -23,6 +21,7 @@ import com.badlogic.gdx.physics.bullet.collision.btDispatcher;
 import com.badlogic.gdx.physics.bullet.collision.btDispatcherInfo;
 import com.badlogic.gdx.physics.bullet.collision.btManifoldResult;
 import com.badlogic.gdx.physics.bullet.collision.btSphereBoxCollisionAlgorithm;
+import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
 import com.badlogic.gdx.utils.Array;
 
 import br.edu.ufabc.games.projetofinal.model.Bodies;
@@ -78,13 +77,12 @@ public class GameScreen extends AbstractScreen {
 		cenario = new GameObject(ModelFactory.getModelbyName("CENARIO"), null);
 		cenario.transform.scale(500, 500, 500);
 		
-		objetivo = new GameObject(ModelFactory.getModelbyName("OBJETIVO"),  new btBoxShape(new Vector3(10f, 10f, 10f)));
-		objetivo.transform.scale(100, 100, 100);
-		objetivo.transform.translate(0, 100, 100);
-		
+		objetivo = new GameObject(ModelFactory.getModelbyName("OBJETIVO"), new btSphereShape(25f));
+		objetivo.transform.translate(0,0,0);
+		objetivo.transform.scale(3, 3, 3);
 		
 		nave = new Nave();
-		nave.getCurrent().transform.translate(0, 0, -450);
+		nave.getCurrent().transform.translate(0, 0, -750);
 		nave.getCurrent().transform.scale(0.5f, 0.5f, 0.5f);
 
 		Random rnd = new Random();
@@ -169,9 +167,6 @@ public class GameScreen extends AbstractScreen {
 			nave.parar();
 		}
 
-		updateBodies(delta);
-		nave.update(delta);
-		nave.getCurrent().corpo.setWorldTransform(nave.getCurrent().transform);
 		
 		for(GameObject b: bodies) {
 			if(checkCollision(b) && b.bodyType.equals("SUN")) {
@@ -180,6 +175,20 @@ public class GameScreen extends AbstractScreen {
 			} else {
 				nave.onGravity = false;
 			}
+		}
+		
+		if(nave.fuel <=0) {
+			setDone(true);
+		}
+		
+		
+		updateBodies(delta);
+		nave.update(delta);
+		
+		nave.getCurrent().corpo.setWorldTransform(nave.getCurrent().transform);
+		
+		if(checkCollision(objetivo)) {
+			setDone(true);
 		}
 		
 	}

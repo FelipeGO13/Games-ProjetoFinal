@@ -81,7 +81,6 @@ public class Nave {
 		
 		if (direcao == FRENTE) {
 			gameObject.transform.getTranslation(newPosition);
-			System.out.println(newPosition);
 			velocidade.z += ACELERACAO * delta;
 			if (velocidade.z >= 8f)
 				velocidade.z = 8;
@@ -136,9 +135,8 @@ public class Nave {
 		}
 
 		float diff = lastPosition.dst(newPosition);
-		System.out.println(diff);
-		if(diff > 10) {
-			fuel -= 1;
+		if(diff > 10 && fuel > 0) {
+			fuel -= 2;
 		}
 	}
 
