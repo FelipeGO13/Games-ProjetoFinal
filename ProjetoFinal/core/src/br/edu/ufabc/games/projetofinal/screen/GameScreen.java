@@ -28,7 +28,7 @@ import br.edu.ufabc.games.projetofinal.model.Bodies;
 import br.edu.ufabc.games.projetofinal.model.GameObject;
 import br.edu.ufabc.games.projetofinal.model.MassiveBody;
 import br.edu.ufabc.games.projetofinal.model.ModelFactory;
-import br.edu.ufabc.games.projetofinal.model.Nave;
+import br.edu.ufabc.games.projetofinal.model.Ship;
 import br.edu.ufabc.games.projetofinal.util.Commands;
 import br.edu.ufabc.games.projetofinal.util.Utils;
 
@@ -46,7 +46,7 @@ public class GameScreen extends AbstractScreen {
 	// elementos
 	private GameObject cenario;
 	private GameObject objetivo;
-	private Nave nave;
+	private Ship nave;
 	private Array<GameObject> bodies;
 
 	public static float ORBITAL_VELOCITY = 0.2f;
@@ -74,9 +74,8 @@ public class GameScreen extends AbstractScreen {
 		objetivo.transform.translate(0,0,0);
 		objetivo.transform.scale(3, 3, 3);
 		
-		nave = new Nave();
-		nave.getCurrent().transform.translate(0, 0, -750);
-		nave.getCurrent().transform.scale(0.5f, 0.5f, 0.5f);
+		nave = new Ship();
+		nave.camera.translate(0, 0, -500);
 
 		Random rnd = new Random();
 

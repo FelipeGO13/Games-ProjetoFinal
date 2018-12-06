@@ -67,11 +67,11 @@ public class StartScreen extends AbstractScreen {
 	public void draw(float delta) {
 		
 		// TODO Auto-generated method stub
-		// tornando meu plano cartesiano canônico 2D
+		// tornando meu plano cartesiano canï¿½nico 2D
 		viewMatrix.setToOrtho2D(0, 0, Utils.GAME_WIDTH, Utils.GAME_HEIGHT);
-		// spritebatch, siga esse padrão de plano cartesiano
+		// spritebatch, siga esse padrï¿½o de plano cartesiano
 		spriteBatch.setProjectionMatrix(viewMatrix);
-		// qualquer transformação linear (escala, rotação), ficara armazenada na
+		// qualquer transformaï¿½ï¿½o linear (escala, rotaï¿½ï¿½o), ficara armazenada na
 		// tranMatrix
 		spriteBatch.setTransformMatrix(tranMatrix);
 		spriteBatch.begin();

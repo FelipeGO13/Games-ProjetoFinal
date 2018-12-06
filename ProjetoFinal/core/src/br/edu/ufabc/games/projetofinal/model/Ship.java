@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 
 import br.edu.ufabc.games.projetofinal.util.FirstPersonCamera;
 
-public class Nave {
+public class Ship {
 	private GameObject gameObject;	
 	public FirstPersonCamera camera;
 	
@@ -32,21 +32,21 @@ public class Nave {
 	private Vector3 lastPosition;
 	private Vector3 newPosition;
 	
-	public Nave () {
+	public Ship () {
 		shipShape = new btBoxShape(new Vector3(0.5f, 0.5f, 0.5f));
 		gameObject = new GameObject(ModelFactory.getModelbyName("NAVE"), shipShape);
 		gameObject.transform.scale(0.5f, 0.5f, 0.5f);
-		gameObject.transform.rotate(Vector3.Y, 180);
 		
 		camera = new FirstPersonCamera(35.0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.near = 0.01f;
 		camera.far = 1000f;
+		camera.lookAt(Vector3.Z);
 		camera.translate(0, 2, 0);
 		camera.update();
 		
 		velocidade = new Vector3();
 		onGravity = false;
-		fuel = 100f;
+		fuel = 1000f;
 		newPosition = new Vector3(0,0,-450);
 		lastPosition = new Vector3(0, 0, -450);
 	}
