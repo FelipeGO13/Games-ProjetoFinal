@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
 public class Utils {
-	public static final int GAME_WIDTH  = 1024;
-	public static final int GAME_HEIGHT = 768;
+	public static final int GAME_WIDTH  = 1920;
+	public static final int GAME_HEIGHT = 1080;
 	
 	
 	public static Vector2 convertCoordinates(float x, float y) {

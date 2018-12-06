@@ -155,11 +155,11 @@ public class GameScreen extends AbstractScreen {
 		if (Commands.comandos[Commands.DIREITA]) {
 			nave.andarParaDireita();
 		}
-		if (Commands.comandos[Commands.CIMA]) {
-			nave.andarParaCima();
+		if (Commands.comandos[Commands.INCLINANDO_ESQUERDA]) {
+			nave.inclinarParaEsquerda();
 		}
-		if (Commands.comandos[Commands.BAIXO]) {
-			nave.andarParaBaixo();
+		if (Commands.comandos[Commands.INCLINANDO_DIREITA]) {
+			nave.inclinarParaDireita();
 		}
 		if (!Commands.comandos[Commands.FRENTE] && !Commands.comandos[Commands.TRAS]
 				&& !Commands.comandos[Commands.ESQUERDA] && !Commands.comandos[Commands.DIREITA]

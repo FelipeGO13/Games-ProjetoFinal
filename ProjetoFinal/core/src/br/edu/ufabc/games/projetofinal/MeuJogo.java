@@ -35,7 +35,9 @@ public class MeuJogo extends Game implements InputProcessor, ControllerListener 
 		assetManager.load("planets/planet_dust.g3db", Model.class);
 		assetManager.load("planets/planet_reststop.g3db", Model.class);
 		assetManager.load("mothership/mothership.g3db", Model.class);
+		
 		Gdx.input.setInputProcessor(this);
+		Gdx.input.setCursorCatched(true);
 		
 		currentScreen = new StartScreen("START");
 	}
@@ -44,7 +46,7 @@ public class MeuJogo extends Game implements InputProcessor, ControllerListener 
 	public void render () {
 		currentScreen.render(Gdx.graphics.getDeltaTime());
 		// logica minima do controller
-		// quando uma tela termina sua função, passa para a próxima
+		// quando uma tela termina sua funï¿½ï¿½o, passa para a prï¿½xima
 		if (currentScreen.isDone()) {
 			if (currentScreen.getId().equals("START")) {
 				currentScreen = new GameScreen("GAME");
@@ -58,7 +60,7 @@ public class MeuJogo extends Game implements InputProcessor, ControllerListener 
 		}
 	}
 
-	/*--- Métodos do InputProcessor - (touch + teclado)--------------------------------------*/
+	/*--- Mï¿½todos do InputProcessor - (touch + teclado)--------------------------------------*/
 	@Override
 	public boolean keyDown(int keycode) {
 		
@@ -97,6 +99,14 @@ public class MeuJogo extends Game implements InputProcessor, ControllerListener 
 		}
 		if (keycode == Input.Keys.D) {
 			Commands.comandos[Commands.DIREITA] = true;
+			return true;
+		}
+		if (keycode == Input.Keys.Q) {
+			Commands.comandos[Commands.INCLINANDO_ESQUERDA] = true;
+			return true;
+		}
+		if (keycode == Input.Keys.E) {
+			Commands.comandos[Commands.INCLINANDO_DIREITA] = true;
 			return true;
 		}
 		return false;
@@ -141,6 +151,18 @@ public class MeuJogo extends Game implements InputProcessor, ControllerListener 
 			Commands.comandos[Commands.DIREITA] = false;
 			return true;
 		}
+		if (keycode == Input.Keys.Q) {
+			Commands.comandos[Commands.INCLINANDO_ESQUERDA] = false;
+			return true;
+		}
+		if (keycode == Input.Keys.E) {
+			Commands.comandos[Commands.INCLINANDO_DIREITA] = false;
+			return true;
+		}
+		if (keycode == Input.Keys.ESCAPE) {
+			Gdx.app.exit();
+			return true;
+		}
 		return false;
 	}
 
@@ -169,7 +191,7 @@ public class MeuJogo extends Game implements InputProcessor, ControllerListener 
 		return false;
 	}
 	
-	/*--- Métodos do Controller - (touch + teclado)--------------------------------------*/
+	/*--- Mï¿½todos do Controller - (touch + teclado)--------------------------------------*/
 
 	@Override
 	public void connected(Controller controller) {
