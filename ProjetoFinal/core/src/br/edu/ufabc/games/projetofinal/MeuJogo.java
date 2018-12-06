@@ -17,6 +17,7 @@ import br.edu.ufabc.games.projetofinal.screen.CreditsScreen;
 import br.edu.ufabc.games.projetofinal.screen.GameScreen;
 import br.edu.ufabc.games.projetofinal.screen.StartScreen;
 import br.edu.ufabc.games.projetofinal.util.Commands;
+import br.edu.ufabc.games.projetofinal.util.Utils;
 
 public class MeuJogo extends Game implements InputProcessor, ControllerListener  {
 	private AbstractScreen currentScreen;
@@ -64,33 +65,12 @@ public class MeuJogo extends Game implements InputProcessor, ControllerListener 
 	@Override
 	public boolean keyDown(int keycode) {
 		
-		// TODO Auto-generated method stub
-		if (keycode == Input.Keys.SPACE) {
+		if (keycode == Input.Keys.W) {
 			Commands.comandos[Commands.FRENTE] = true;
 			return true;
 		}
-		if (keycode == Input.Keys.UP) {
-			Commands.comandos[Commands.CIMA] = true;
-			return true;
-		}
-		if (keycode == Input.Keys.DOWN) {
-			Commands.comandos[Commands.BAIXO] = true;
-			return true;
-		}
-		if (keycode == Input.Keys.LEFT) {
-			Commands.comandos[Commands.ESQUERDA] = true;
-			return true;
-		}
-		if (keycode == Input.Keys.RIGHT) {
-			Commands.comandos[Commands.DIREITA] = true;
-			return true;
-		}
-		if (keycode == Input.Keys.W) {
-			Commands.comandos[Commands.CIMA] = true;
-			return true;
-		}
 		if (keycode == Input.Keys.S) {
-			Commands.comandos[Commands.BAIXO] = true;
+			Commands.comandos[Commands.TRAS] = true;
 			return true;
 		}
 		if (keycode == Input.Keys.A) {
@@ -114,33 +94,12 @@ public class MeuJogo extends Game implements InputProcessor, ControllerListener 
 
 	@Override
 	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
-		if (keycode == Input.Keys.SPACE) {
+		if (keycode == Input.Keys.W) {
 			Commands.comandos[Commands.FRENTE] = false;
 			return true;
 		}
-		if (keycode == Input.Keys.UP) {
-			Commands.comandos[Commands.CIMA] = false;
-			return true;
-		}
-		if (keycode == Input.Keys.DOWN) {
-			Commands.comandos[Commands.BAIXO] = false;
-			return true;
-		}
-		if (keycode == Input.Keys.LEFT) {
-			Commands.comandos[Commands.ESQUERDA] = false;
-			return true;
-		}
-		if (keycode == Input.Keys.RIGHT) {
-			Commands.comandos[Commands.DIREITA] = false;
-			return true;
-		}
-		if (keycode == Input.Keys.W) {
-			Commands.comandos[Commands.CIMA] = false;
-			return true;
-		}
 		if (keycode == Input.Keys.S) {
-			Commands.comandos[Commands.BAIXO] = false;
+			Commands.comandos[Commands.TRAS] = false;
 			return true;
 		}
 		if (keycode == Input.Keys.A) {
@@ -181,8 +140,9 @@ public class MeuJogo extends Game implements InputProcessor, ControllerListener 
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		Gdx.input.setCursorPosition(Utils.MID_SCREEN_X, Utils.MID_SCREEN_Y);
+		return true;
 	}
 
 	@Override

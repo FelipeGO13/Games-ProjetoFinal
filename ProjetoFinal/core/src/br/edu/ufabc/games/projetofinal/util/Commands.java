@@ -6,8 +6,6 @@ public class Commands {
     public static final int TRAS     = 1;
     public static final int ESQUERDA = 2;
     public static final int DIREITA  = 3;
-    public static final int CIMA = 4;
-    public static final int BAIXO  = 5;
     public static final int INCLINANDO_ESQUERDA = 4;
     public static final int INCLINANDO_DIREITA = 5;
 } 

@@ -29,7 +29,6 @@ import br.edu.ufabc.games.projetofinal.model.GameObject;
 import br.edu.ufabc.games.projetofinal.model.MassiveBody;
 import br.edu.ufabc.games.projetofinal.model.ModelFactory;
 import br.edu.ufabc.games.projetofinal.model.Nave;
-import br.edu.ufabc.games.projetofinal.util.ChasingCamera;
 import br.edu.ufabc.games.projetofinal.util.Commands;
 import br.edu.ufabc.games.projetofinal.util.Utils;
 
@@ -42,7 +41,6 @@ public class GameScreen extends AbstractScreen {
 	// parte 3D
 	private ModelBatch modelBatch;
 	private Environment environment;
-	private ChasingCamera camera;
 	private BitmapFont bitmapFont;
 
 	// elementos
@@ -68,11 +66,6 @@ public class GameScreen extends AbstractScreen {
 		bitmapFont = new BitmapFont(Gdx.files.internal("fonts/space.fnt"));
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 1, 1, 1, 1));
-		camera = new ChasingCamera(67.0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), -10, -8);
-		camera.near = 0.01f;
-		camera.far = 1000f;
-		camera.setOffsetYIn(5);
-		camera.setOffsetYOut(5);
 
 		cenario = new GameObject(ModelFactory.getModelbyName("CENARIO"), null);
 		cenario.transform.scale(500, 500, 500);
@@ -100,11 +93,8 @@ public class GameScreen extends AbstractScreen {
 			createBody(i);
 		}
 
-		camera.setObjectToFollow(nave.getCurrent());
-
 		collisionConfig = new btDefaultCollisionConfiguration();
 		dispatcher = new btCollisionDispatcher(collisionConfig);
-		camera.update();
 
 	}
 	
@@ -155,16 +145,19 @@ public class GameScreen extends AbstractScreen {
 		if (Commands.comandos[Commands.DIREITA]) {
 			nave.andarParaDireita();
 		}
+		if (!Commands.comandos[Commands.FRENTE] && !Commands.comandos[Commands.TRAS]
+				&& !Commands.comandos[Commands.ESQUERDA] && !Commands.comandos[Commands.DIREITA]
+				&& !Commands.comandos[Commands.FRENTE] && !Commands.comandos[Commands.TRAS]) {
+			nave.parar();
+		}
 		if (Commands.comandos[Commands.INCLINANDO_ESQUERDA]) {
 			nave.inclinarParaEsquerda();
 		}
 		if (Commands.comandos[Commands.INCLINANDO_DIREITA]) {
 			nave.inclinarParaDireita();
 		}
-		if (!Commands.comandos[Commands.FRENTE] && !Commands.comandos[Commands.TRAS]
-				&& !Commands.comandos[Commands.ESQUERDA] && !Commands.comandos[Commands.DIREITA]
-				&& !Commands.comandos[Commands.CIMA] && !Commands.comandos[Commands.BAIXO]) {
-			nave.parar();
+		if(!Commands.comandos[Commands.INCLINANDO_ESQUERDA] && !Commands.comandos[Commands.INCLINANDO_DIREITA]) {
+			nave.pararDeInclinar();
 		}
 
 		
@@ -230,7 +223,7 @@ public class GameScreen extends AbstractScreen {
 		Gdx.gl.glClear(GL20.GL_DEPTH_BUFFER_BIT | GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glClearColor(0, 0, 0, 0);
 		if (nave != null) {
-			modelBatch.begin(camera);
+			modelBatch.begin(nave.camera);
 			modelBatch.render(cenario, environment);
 			modelBatch.render(objetivo, environment);
 			for (GameObject mb : bodies) {
@@ -239,7 +232,7 @@ public class GameScreen extends AbstractScreen {
 
 			modelBatch.render(nave.getCurrent(), environment);
 			modelBatch.end();
-			camera.update();
+			nave.camera.update();
 		}
 
 		viewMatrix.setToOrtho2D(0, 0, Utils.GAME_WIDTH, Utils.GAME_HEIGHT);
