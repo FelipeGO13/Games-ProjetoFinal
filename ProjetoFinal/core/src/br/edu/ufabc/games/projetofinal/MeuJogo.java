@@ -53,7 +53,7 @@ public class MeuJogo extends Game implements InputProcessor, ControllerListener 
 				currentScreen = new GameScreen("GAME");
 			}
 			else if (currentScreen.getId().equals("GAME")) {
-				currentScreen = new CreditsScreen("CREDITS");
+				currentScreen = new CreditsScreen("CREDITS", currentScreen.END_STATE);
 			}
 			else {
 				currentScreen = new StartScreen("START");

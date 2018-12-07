@@ -68,7 +68,7 @@ public class GameObject extends ModelInstance {
 		float m2 = other.mass;
 		Vector3 dr = tmp.set(other.position).sub(this.position);
 		float l = dr.len();
-		if (other.bodyType == "SUN") {
+		if (other.bodyType.equals("SUN")) {
 			energy += ENERGY_ABS_RATE/(l*l); // Absorb Radiation energy
 		}
 		return dr.scl(G * m1 * m2 / (l * l * l));

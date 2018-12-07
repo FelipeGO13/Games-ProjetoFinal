@@ -15,19 +15,24 @@ public class CreditsScreen extends AbstractScreen{
 	private Matrix4 viewMatrix;
 	private Matrix4 tranMatrix;
 	private BitmapFont font;
+	private BitmapFont endFont;
 	private float time = 0f;
 	private boolean visible = false;
 	
 	public String blinking_text;
+	private String message;
 
-	public CreditsScreen(String id) {
+	public CreditsScreen(String id, String final_message) {
 		super(id);
 		texture = new Texture(Gdx.files.internal("credits.jpg"));
 		spriteBatch = new SpriteBatch();
 		viewMatrix  = new Matrix4();
 		tranMatrix  = new Matrix4();
 		font = new BitmapFont(Gdx.files.internal("fonts/space.fnt"));
+		endFont = new BitmapFont(Gdx.files.internal("fonts/space.fnt"));
 		font.setColor(Color.BLACK);
+		endFont.setColor(Color.RED);
+		message = final_message;
 		blinking_text = "Touch to start again";
 	}
 	@Override
@@ -65,6 +70,8 @@ public class CreditsScreen extends AbstractScreen{
 		}
 		
 		font.draw(spriteBatch, "Created by: Felipe, Lucas e Luiz",100,800); 
+		
+		endFont.draw(spriteBatch, message, 800, 200); 
 		
 		spriteBatch.end();
 	}

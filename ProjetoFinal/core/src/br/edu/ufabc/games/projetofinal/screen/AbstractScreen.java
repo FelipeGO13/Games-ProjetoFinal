@@ -8,6 +8,7 @@ public abstract class AbstractScreen implements Screen{
 	public abstract void draw(float delta);
 	
 	private String id;
+	public String END_STATE;
 	private boolean done;
 	
 	public AbstractScreen(String id) {

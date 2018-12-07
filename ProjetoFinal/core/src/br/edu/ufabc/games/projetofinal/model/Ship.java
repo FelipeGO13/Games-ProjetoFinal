@@ -30,7 +30,7 @@ public class Ship {
 	
 	public btCollisionShape shipShape;
 	
-	public boolean onGravity;
+	public int remainingFalls = 1;
 	public float fuel;
 	private Vector3 lastPosition;
 	private Vector3 newPosition;
@@ -47,7 +47,6 @@ public class Ship {
 		camera.lookAt(Vector3.Z);
 		camera.update();
 		
-		onGravity = false;
 		fuel = 1000f;
 		newPosition = new Vector3();
 		lastPosition = new Vector3();

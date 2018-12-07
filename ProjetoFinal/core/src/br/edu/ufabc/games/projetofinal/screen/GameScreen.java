@@ -34,6 +34,7 @@ import br.edu.ufabc.games.projetofinal.util.Commands;
 import br.edu.ufabc.games.projetofinal.util.Utils;
 
 public class GameScreen extends AbstractScreen {
+	
 	// parte 2D
 	private Matrix4 viewMatrix;
 	private Matrix4 tranMatrix;
@@ -177,24 +178,26 @@ public class GameScreen extends AbstractScreen {
 		
 		for(GameObject b: bodies) {
 			if(checkCollision(b) && b.bodyType.equals("SUN")) {
-				nave.onGravity = true;
+				nave.remainingFalls -= 1;
 				break;
-			} else {
-				nave.onGravity = false;
 			}
 		}
 		
-		if(nave.fuel <=0) {
-			setDone(true);
-		}
-		
-		
 		updateBodies(delta);
 		nave.update(delta);
-		
 		nave.getCurrent().corpo.setWorldTransform(nave.getCurrent().transform);
 		
+		/* Consicoes de fim de jogo */
+		if (nave.remainingFalls < 0) {
+			END_STATE = "LOST ON A GRAVITATIONAL WELL";
+			setDone(true);
+		}
+		if(nave.fuel <=0) {
+			END_STATE = "OUT OF FUEL";
+			setDone(true);
+		}
 		if(checkCollision(objetivo)) {
+			END_STATE = "ARRIVED SAFELY!";
 			setDone(true);
 		}
 		
@@ -231,7 +234,6 @@ public class GameScreen extends AbstractScreen {
 				b.corpo.setWorldTransform(b.transform);
 			}
 		}
-
 	}
 
 	@Override
@@ -258,8 +260,6 @@ public class GameScreen extends AbstractScreen {
 		bitmapFont.draw(spriteBatch, "Mission: reach the mothership", 550, 900);
 
 		bitmapFont.draw(spriteBatch, "Energy " + (int) nave.fuel, 10, 850);
-		if(nave.onGravity)
-			bitmapFont.draw(spriteBatch, "On gravity!", 1000, 850);
 		spriteBatch.end();
 
 	}
