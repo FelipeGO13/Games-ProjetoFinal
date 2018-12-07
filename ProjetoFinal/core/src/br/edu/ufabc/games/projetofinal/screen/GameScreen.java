@@ -3,6 +3,7 @@ package br.edu.ufabc.games.projetofinal.screen;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -56,6 +57,7 @@ public class GameScreen extends AbstractScreen {
 	// Bullet
 	btCollisionConfiguration collisionConfig;
 	btDispatcher dispatcher;
+	private Music music;
 
 	public GameScreen(String id) {
 		super(id);
@@ -82,6 +84,9 @@ public class GameScreen extends AbstractScreen {
 		nave.getCurrent().corpo.setWorldTransform(nave.getCurrent().transform);
 		
 		bodies.add(nave.getCurrent());
+		
+		music = Gdx.audio.newMusic(Gdx.files.internal("colisao.mp3"));
+		music.setLooping(false);
 		
 		MassiveBody sun1 = createStar(new Vector3(-50,0,-250));
 		MassiveBody sun2 = createStar(new Vector3(0,0,-250));
@@ -189,7 +194,9 @@ public class GameScreen extends AbstractScreen {
 		for(GameObject b: bodies) {
 			if(checkCollision(b) && b.bodyType.equals("SUN")) {
 				nave.remainingFalls -= 1;
+				music.play();
 				break;
+
 			}
 		}
 		

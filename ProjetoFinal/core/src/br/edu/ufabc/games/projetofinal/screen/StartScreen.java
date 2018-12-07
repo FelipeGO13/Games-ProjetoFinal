@@ -30,6 +30,9 @@ public class StartScreen extends AbstractScreen {
 		tranMatrix = new Matrix4();
 		font = new BitmapFont(Gdx.files.internal("fonts/space.fnt"));
 		progress = 0;
+		music = Gdx.audio.newMusic(Gdx.files.internal("somstart.mp3"));
+		music.setLooping(true);
+		music.play();
 
 	}
 
@@ -47,6 +50,7 @@ public class StartScreen extends AbstractScreen {
 		if (loaded) {
 			if (Gdx.input.justTouched()) {
 				setDone(true);
+				music.stop();
 			}
 		}
 

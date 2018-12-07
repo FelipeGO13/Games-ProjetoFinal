@@ -69,11 +69,21 @@ public class CreditsScreen extends AbstractScreen{
 			font.draw(spriteBatch, blinking_text,100,70); 
 		}
 		
-		font.draw(spriteBatch, "Created by: Felipe, Lucas e Luiz",100,800); 
+		
 		
 		endFont.draw(spriteBatch, message, 800, 200); 
 		
+		font.draw(spriteBatch, "Projeto Final:", 100, 850);
+		font.draw(spriteBatch, "Introducao a Programacao de jogos", 100, 800);
+
+		font.draw(spriteBatch, "Felipe Gabriel Osorio", 100, 600);
+		font.draw(spriteBatch, "Lucas Venancio de Almeida", 100, 550);
+		font.draw(spriteBatch, "Luiz Gabriel Correia", 100, 500);
+		font.draw(spriteBatch, "Prof. Isidro", 100, 400);
+		
 		spriteBatch.end();
 	}
+	
+	
 
 }

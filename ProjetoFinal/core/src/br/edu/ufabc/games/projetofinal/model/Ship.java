@@ -1,6 +1,7 @@
 package br.edu.ufabc.games.projetofinal.model;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
@@ -10,6 +11,7 @@ import br.edu.ufabc.games.projetofinal.util.FirstPersonCamera;
 public class Ship {
 	private GameObject gameObject;	
 	public FirstPersonCamera camera;
+	
 
 	private int direcao;
 	private int inclinar = 0;
@@ -36,6 +38,9 @@ public class Ship {
 	private boolean stop = true;
 	private Vector3 lastPosition;
 	private Vector3 newPosition;
+	private Music   music;
+	
+	
 	
 	public Ship() {
 		shipShape = new btBoxShape(new Vector3(0.5f, 0.5f, 0.5f));
@@ -76,6 +81,10 @@ public class Ship {
 
 	public void andarParaFrente() {
 		direcao = FRENTE;
+		music = Gdx.audio.newMusic(Gdx.files.internal("somnave.mp3"));
+		music.setLooping(false);
+		music.play();
+		
 	}
 
 	public void andarParaTras() {
