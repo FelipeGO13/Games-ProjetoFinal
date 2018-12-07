@@ -137,12 +137,14 @@ public class Ship {
 		
 		if (direcao == TRAS) {
 			gameObject.transform.setTranslation(camera.position);
+			gameObject.transform.getTranslation(newPosition);
 			
 			camera.translate(camera.direction.cpy().scl(-1));
 		}
 		
 		if (direcao == ESQUERDA) {
 			gameObject.transform.setTranslation(camera.position);
+			gameObject.transform.getTranslation(newPosition);
 			
 			Vector3 esquerda = camera.PITCH_AXIS;
 			camera.translate(esquerda);
@@ -150,6 +152,7 @@ public class Ship {
 		
 		if (direcao == DIREITA) {
 			gameObject.transform.setTranslation(camera.position);
+			gameObject.transform.getTranslation(newPosition);
 			
 			Vector3 direita = camera.PITCH_AXIS.cpy().scl(-1);
 			camera.translate(direita);

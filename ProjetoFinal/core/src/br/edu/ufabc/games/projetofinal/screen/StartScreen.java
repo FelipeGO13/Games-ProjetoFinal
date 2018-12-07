@@ -18,8 +18,8 @@ public class StartScreen extends AbstractScreen {
 	private BitmapFont font;
 	private boolean loaded = false;
 	private int progress;
-	private float time=0;
-	private boolean visible=false;
+	private float time = 0;
+	private boolean visible = false;
 	private Music   music;
 
 	public StartScreen(String id) {
