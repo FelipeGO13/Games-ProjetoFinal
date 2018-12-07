@@ -76,10 +76,12 @@ public class GameScreen extends AbstractScreen {
 		objetivo.transform.scale(3, 3, 3);
 		
 		nave = new Ship();
-		nave.camera.translate(0, 0, -500);
-
-		Random rnd = new Random();
-
+		nave.setPosition(0, 0, -300);
+		nave.getCurrent().setMass(100);
+		nave.getCurrent().corpo.setWorldTransform(nave.getCurrent().transform);
+		
+		bodies.add(nave.getCurrent());
+		
 		MassiveBody sun = new MassiveBody("SUN");
 		sun.getCurrent().setPosition(Bodies.SUN.getPos());
 		sun.getCurrent().setVelocity(Bodies.SUN.getVel());
@@ -88,6 +90,7 @@ public class GameScreen extends AbstractScreen {
 
 		bodies.add(sun.getCurrent());
 		
+		Random rnd = new Random();
 		int numPlanets = rnd.nextInt((5 - 1) + 1);
 		for (int i = 0; i < 5; i++) {
 			createBody(i);

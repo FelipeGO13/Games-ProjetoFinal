@@ -32,7 +32,7 @@ public class Ship {
 	private Vector3 lastPosition;
 	private Vector3 newPosition;
 	
-	public Ship () {
+	public Ship() {
 		shipShape = new btBoxShape(new Vector3(0.5f, 0.5f, 0.5f));
 		gameObject = new GameObject(ModelFactory.getModelbyName("NAVE"), shipShape);
 		gameObject.transform.scale(0.5f, 0.5f, 0.5f);
@@ -41,14 +41,21 @@ public class Ship {
 		camera.near = 0.01f;
 		camera.far = 1000f;
 		camera.lookAt(Vector3.Z);
-		camera.translate(0, 2, 0);
 		camera.update();
 		
-		velocidade = new Vector3();
+		//gameObject.camera = camera;
+		
 		onGravity = false;
 		fuel = 1000f;
-		newPosition = new Vector3(0,0,-450);
-		lastPosition = new Vector3(0, 0, -450);
+		velocidade = new Vector3();
+		newPosition = new Vector3();
+		lastPosition = new Vector3();
+	}
+	
+	public void setPosition(float x, float y, float z) {
+		camera.position.set(x, y, z);
+		//camera.position.set(gameObject.position);
+		gameObject.setPosition(camera.position);
 	}
 	
 	public void setYaw(float angle) {
@@ -113,7 +120,6 @@ public class Ship {
 		}
 		
 		if (direcao == FRENTE) {
-			gameObject.transform.setTranslation(camera.position);
 			gameObject.transform.getTranslation(newPosition);
 			
 			velocidade.z += ACELERACAO * delta;
@@ -123,26 +129,23 @@ public class Ship {
 		}
 		
 		if (direcao == PARADO) {
-			gameObject.transform.setTranslation(camera.position);
 			
 			velocidade.z -= ACELERACAO * delta;
 			if (velocidade.z <= 0.0f) {
 				velocidade.z = 0;
 			}
-			//camera.translate(velocidade);
+			
 			gameObject.transform.getTranslation(lastPosition);
 			gameObject.transform.getTranslation(newPosition);
 		}
 		
 		if (direcao == TRAS) {
-			gameObject.transform.setTranslation(camera.position);
 			gameObject.transform.getTranslation(newPosition);
 			
 			camera.translate(camera.direction.cpy().scl(-1));
 		}
 		
 		if (direcao == ESQUERDA) {
-			gameObject.transform.setTranslation(camera.position);
 			gameObject.transform.getTranslation(newPosition);
 			
 			Vector3 esquerda = camera.PITCH_AXIS;
@@ -150,7 +153,6 @@ public class Ship {
 		}
 		
 		if (direcao == DIREITA) {
-			gameObject.transform.setTranslation(camera.position);
 			gameObject.transform.getTranslation(newPosition);
 			
 			Vector3 direita = camera.PITCH_AXIS.cpy().scl(-1);
@@ -161,6 +163,7 @@ public class Ship {
 		if(diff > 10 && fuel > 0) {
 			fuel -= 2;
 		}
+		
 	}
 
 	public GameObject getCurrent() {

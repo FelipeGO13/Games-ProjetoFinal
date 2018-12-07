@@ -9,16 +9,18 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 
+import br.edu.ufabc.games.projetofinal.util.FirstPersonCamera;
+
 public class GameObject extends ModelInstance {
 
 	private AnimationController animationController;
 	private boolean done;
 	private float angle=0f;
 	public final btCollisionObject corpo;
-	public Vector3 position;
-	public Vector3 velocity;
-	public float mass;
-	public Vector3 acceleration;
+	public float mass = 1;
+	public Vector3 position = new Vector3();
+	public Vector3 velocity = new Vector3();
+	public Vector3 acceleration = new Vector3();
 	public Vector3 tmp;
 	public String bodyType;
 
