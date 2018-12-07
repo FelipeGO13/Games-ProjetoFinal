@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.collision.CollisionObjectWrapper;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionAlgorithm;
@@ -70,7 +71,7 @@ public class GameScreen extends AbstractScreen {
 		cenario = new GameObject(ModelFactory.getModelbyName("CENARIO"), null);
 		cenario.transform.scale(500, 500, 500);
 		
-		objetivo = new GameObject(ModelFactory.getModelbyName("OBJETIVO"), new btSphereShape(25f));
+		objetivo = new GameObject(ModelFactory.getModelbyName("OBJETIVO"), new btSphereShape(15f));
 		objetivo.transform.translate(0,0,0);
 		objetivo.transform.scale(3, 3, 3);
 		
@@ -86,9 +87,9 @@ public class GameScreen extends AbstractScreen {
 		sun.getCurrent().transform.scale(Bodies.SUN.getScale(), Bodies.SUN.getScale(), Bodies.SUN.getScale());
 
 		bodies.add(sun.getCurrent());
+		
 		int numPlanets = rnd.nextInt((5 - 1) + 1);
-		System.out.println("Numero satelites: " + (numPlanets + 1));
-		for (int i = 0; i < numPlanets + 1; i++) {
+		for (int i = 0; i < 5; i++) {
 			createBody(i);
 		}
 
@@ -188,7 +189,9 @@ public class GameScreen extends AbstractScreen {
 	public void createBody(int id) {
 		MassiveBody mb = new MassiveBody(Bodies.getById(id).getModel());
 
-		mb.getCurrent().setPosition(Bodies.getById(id).getPos());
+		Vector3 position = Bodies.getById(id).getPos().cpy();
+		Vector3 positionSun = Bodies.getById(-1).getPos().cpy();
+		mb.getCurrent().setPosition(position.add(positionSun));
 		mb.getCurrent().setVelocity(Bodies.getById(id).getVel());
 		mb.getCurrent().setMass(Bodies.getById(id).getMass());
 		mb.getCurrent().transform.scale(Bodies.getById(id).getScale(), Bodies.getById(id).getScale(),
@@ -238,10 +241,11 @@ public class GameScreen extends AbstractScreen {
 		spriteBatch.setProjectionMatrix(viewMatrix);
 		spriteBatch.setTransformMatrix(tranMatrix);
 		spriteBatch.begin();
+		bitmapFont.draw(spriteBatch, "Mission: reach the mothership", 550, 900);
 
-		bitmapFont.draw(spriteBatch, "Energy " + (int) nave.fuel, 10, 550);
+		bitmapFont.draw(spriteBatch, "Energy " + (int) nave.fuel, 10, 850);
 		if(nave.onGravity)
-			bitmapFont.draw(spriteBatch, "On gravity!", 650, 550);
+			bitmapFont.draw(spriteBatch, "On gravity!", 1000, 850);
 		spriteBatch.end();
 
 	}

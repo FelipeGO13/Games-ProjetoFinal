@@ -4,12 +4,12 @@ import com.badlogic.gdx.math.Vector3;
 
 public enum Bodies {
 	
-	SUN(-1, new Vector3(-20,-20, 0), new Vector3(0, 0, 0), 2E11f, 1f, "SUN"),
-	PLANET1(0, new Vector3(-30, -5, 2), new Vector3(-0.3f, 0, -0.2f), 5E8f, 0.4f, "PLANETA1"),
-	PLANET2(1, new Vector3(-10, -13, 1), new Vector3(-0.3f, 0, -0.5f), 1E9f, 0.4f, "PLANETA2"),
-	PLANET3(2,  new Vector3(-10.3f, -13, 1), new Vector3(-0.3f, 0, -0.7f), 1E7f, 0.08f, "PLANETA3"),
-	PLANET4(3, new Vector3(0, -7, 0.5f), new Vector3(-0.1f, 0, -0.4f), 1E8f, 0.6f, "PLANETA4"),
-	PLANET5(4, new Vector3(-16, -19, 1), new Vector3(-0.1f, 0, -0.7f), 1E7f,  0.2f, "PLANETA5");
+	SUN(-1, new Vector3(0, 0, -250), new Vector3(0, 0, 0), 2E11f, 1f, "SUN"),
+	PLANET1(0, new Vector3(-10, 10, 4), new Vector3(-0.3f, 0, -0.2f), 5E8f, 0.4f, "PLANETA1"),
+	PLANET2(1, new Vector3(10, 7, 1), new Vector3(-0.3f, 0, -0.5f), 1E9f, 0.4f, "PLANETA2"),
+	PLANET3(2, new Vector3(10.3f, 7, 1), new Vector3(-0.3f, 0, -0.7f), 1E7f, 0.08f, "PLANETA3"),
+	PLANET4(3, new Vector3(20, -7, 0.5f), new Vector3(-0.1f, 0, -0.4f), 1E8f, 0.6f, "PLANETA4"),
+	PLANET5(4, new Vector3(4, 1, 1), new Vector3(-0.1f, 0, -0.7f), 1E7f,  0.2f, "PLANETA5");
 	
 	private int id;
 	private Vector3 pos;
