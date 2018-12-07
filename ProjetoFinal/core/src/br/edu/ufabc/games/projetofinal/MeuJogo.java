@@ -90,6 +90,10 @@ public class MeuJogo extends Game implements InputProcessor, ControllerListener 
 			Commands.comandos[Commands.INCLINANDO_DIREITA] = true;
 			return true;
 		}
+		if (keycode == Input.Keys.SHIFT_LEFT) {
+			Commands.comandos[Commands.ACELERANDO] = true;
+			return true;
+		}
 		return false;
 	}
 
@@ -117,6 +121,10 @@ public class MeuJogo extends Game implements InputProcessor, ControllerListener 
 		}
 		if (keycode == Input.Keys.E) {
 			Commands.comandos[Commands.INCLINANDO_DIREITA] = false;
+			return true;
+		}
+		if (keycode == Input.Keys.SHIFT_LEFT) {
+			Commands.comandos[Commands.ACELERANDO] = false;
 			return true;
 		}
 		if (keycode == Input.Keys.ESCAPE) {

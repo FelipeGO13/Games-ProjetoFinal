@@ -82,13 +82,8 @@ public class GameScreen extends AbstractScreen {
 		
 		bodies.add(nave.getCurrent());
 		
-		MassiveBody sun = new MassiveBody("SUN");
-		sun.getCurrent().setPosition(Bodies.SUN.getPos());
-		sun.getCurrent().setVelocity(Bodies.SUN.getVel());
-		sun.getCurrent().setMass(Bodies.SUN.getMass());
-		sun.getCurrent().transform.scale(Bodies.SUN.getScale(), Bodies.SUN.getScale(), Bodies.SUN.getScale());
-
-		bodies.add(sun.getCurrent());
+		createStar(new Vector3(-50,0,-250));
+		createStar(new Vector3(0,0,-250));
 		
 		Random rnd = new Random();
 		int numPlanets = rnd.nextInt((5 - 1) + 1);
@@ -99,6 +94,16 @@ public class GameScreen extends AbstractScreen {
 		collisionConfig = new btDefaultCollisionConfiguration();
 		dispatcher = new btCollisionDispatcher(collisionConfig);
 
+	}
+	
+	void createStar(Vector3 position) {
+		MassiveBody star = new MassiveBody("SUN");
+		star.getCurrent().setPosition(position);
+		star.getCurrent().setVelocity(Bodies.SUN.getVel());
+		star.getCurrent().setMass(Bodies.SUN.getMass());
+		star.getCurrent().transform.scale(Bodies.SUN.getScale(), Bodies.SUN.getScale(), Bodies.SUN.getScale());
+		
+		bodies.add(star.getCurrent());
 	}
 	
 	boolean checkCollision(GameObject b) {
@@ -161,6 +166,12 @@ public class GameScreen extends AbstractScreen {
 		}
 		if(!Commands.comandos[Commands.INCLINANDO_ESQUERDA] && !Commands.comandos[Commands.INCLINANDO_DIREITA]) {
 			nave.pararDeInclinar();
+		}
+		if (Commands.comandos[Commands.ACELERANDO]) {
+			nave.acelerar();
+		}
+		if (!Commands.comandos[Commands.ACELERANDO]) {
+			nave.desacelerar();
 		}
 
 		

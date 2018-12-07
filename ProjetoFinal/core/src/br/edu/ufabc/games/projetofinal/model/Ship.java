@@ -10,11 +10,12 @@ import br.edu.ufabc.games.projetofinal.util.FirstPersonCamera;
 public class Ship {
 	private GameObject gameObject;	
 	public FirstPersonCamera camera;
-	
-	public  Vector3 velocidade;
 
 	private int direcao;
 	private int inclinar = 0;
+	private boolean acelerando = false;
+	private float velocidade = NORMAL_SPEED;
+	private Vector3 direction = new Vector3();
 
 	private static final int PARADO = 0;
 	private static final int FRENTE = 1;
@@ -22,7 +23,9 @@ public class Ship {
 	private static final int ESQUERDA = 3;
 	private static final int DIREITA = 4;
 
-	private static final float ACELERACAO = 5f;
+	private static final float ACELERACAO = 2f;
+	private static final float NORMAL_SPEED = 1f;
+	private static final float MAX_SPEED = 8f;
 	private static final float ROLL_SPEED = 30f;
 	
 	public btCollisionShape shipShape;
@@ -36,6 +39,7 @@ public class Ship {
 		shipShape = new btBoxShape(new Vector3(0.5f, 0.5f, 0.5f));
 		gameObject = new GameObject(ModelFactory.getModelbyName("NAVE"), shipShape);
 		gameObject.transform.scale(0.5f, 0.5f, 0.5f);
+		gameObject.bodyType = "NAVE";
 		
 		camera = new FirstPersonCamera(35.0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.near = 0.01f;
@@ -43,18 +47,14 @@ public class Ship {
 		camera.lookAt(Vector3.Z);
 		camera.update();
 		
-		//gameObject.camera = camera;
-		
 		onGravity = false;
 		fuel = 1000f;
-		velocidade = new Vector3();
 		newPosition = new Vector3();
 		lastPosition = new Vector3();
 	}
 	
 	public void setPosition(float x, float y, float z) {
 		camera.position.set(x, y, z);
-		//camera.position.set(gameObject.position);
 		gameObject.setPosition(camera.position);
 	}
 	
@@ -93,6 +93,14 @@ public class Ship {
 		direcao = PARADO;
 	}
 	
+	public void acelerar() {
+		acelerando = true;
+	}
+	
+	public void desacelerar() {
+		acelerando = false;
+	}
+	
 	public void inclinarParaEsquerda() {
 		inclinar = -1;
 	}
@@ -111,58 +119,60 @@ public class Ship {
 		setYaw(-Gdx.input.getDeltaX() * camera.SENSITIVITY);
 		setPitch(Gdx.input.getDeltaY() * camera.SENSITIVITY);
 		
-		if(onGravity && fuel < 1000) {
-			fuel += 1;
-		}
-		
 		if (inclinar != 0) {
 			setRoll(ROLL_SPEED*inclinar*camera.SENSITIVITY);
 		}
 		
+		/* Atualizar direcao de translacao da camera */
 		if (direcao == FRENTE) {
 			gameObject.transform.getTranslation(newPosition);
-			
-			velocidade.z += ACELERACAO * delta;
-			if (velocidade.z >= 8f)
-				velocidade.z = 8;
-			camera.translate(camera.direction);
+			direction.set(camera.direction);
 		}
-		
 		if (direcao == PARADO) {
-			
-			velocidade.z -= ACELERACAO * delta;
-			if (velocidade.z <= 0.0f) {
-				velocidade.z = 0;
-			}
-			
 			gameObject.transform.getTranslation(lastPosition);
 			gameObject.transform.getTranslation(newPosition);
+			
+			if (!acelerando) {
+				velocidade -= ACELERACAO * delta;
+				if (velocidade <= 0f) {
+					direction.set(0,0,0);
+					velocidade = NORMAL_SPEED;
+				}
+			}
 		}
-		
 		if (direcao == TRAS) {
 			gameObject.transform.getTranslation(newPosition);
-			
-			camera.translate(camera.direction.cpy().scl(-1));
+			direction.set(camera.direction).scl(-1);
 		}
-		
 		if (direcao == ESQUERDA) {
 			gameObject.transform.getTranslation(newPosition);
-			
-			Vector3 esquerda = camera.PITCH_AXIS;
-			camera.translate(esquerda);
+			direction.set(camera.PITCH_AXIS);
+		}
+		if (direcao == DIREITA) {
+			gameObject.transform.getTranslation(newPosition);	
+			direction.set(camera.PITCH_AXIS).scl(-1);
 		}
 		
-		if (direcao == DIREITA) {
-			gameObject.transform.getTranslation(newPosition);
-			
-			Vector3 direita = camera.PITCH_AXIS.cpy().scl(-1);
-			camera.translate(direita);
+		/* Translacao da nave */
+		
+		if (acelerando) {
+			velocidade += ACELERACAO * delta;
+			if (velocidade >= MAX_SPEED)
+				velocidade = MAX_SPEED;
 		}
-
+		
+		camera.translate(direction.cpy().scl(velocidade));
+		//gameObject.velocity.add(direction.cpy().scl(velocidade));
+		
+		
+		/* Atualizar energia e massa capturados */
+		
 		float diff = lastPosition.dst(newPosition);
 		if(diff > 10 && fuel > 0) {
-			fuel -= 2;
+			fuel -= 2*velocidade;
 		}
+		
+		fuel += gameObject.getEnergy();
 		
 	}
 

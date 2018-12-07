@@ -23,6 +23,9 @@ public class GameObject extends ModelInstance {
 	public Vector3 acceleration = new Vector3();
 	public Vector3 tmp;
 	public String bodyType;
+	
+	public float ENERGY_ABS_RATE = 10f;
+	public float energy = 0;
 
 	public GameObject(Model model,  btCollisionShape shape) {
 		super(model);
@@ -65,6 +68,9 @@ public class GameObject extends ModelInstance {
 		float m2 = other.mass;
 		Vector3 dr = tmp.set(other.position).sub(this.position);
 		float l = dr.len();
+		if (other.bodyType == "SUN") {
+			energy += ENERGY_ABS_RATE/(l*l); // Absorb Radiation energy
+		}
 		return dr.scl(G * m1 * m2 / (l * l * l));
 	}
 	
@@ -75,6 +81,12 @@ public class GameObject extends ModelInstance {
 
 		this.transform.setTranslation(position);
 		this.calculateTransforms();
+	}
+	
+	public float getEnergy() {
+		float current_energy = energy;
+		energy = 0;
+		return current_energy;
 	}
 	
 	public void setAngle(float angle) {
