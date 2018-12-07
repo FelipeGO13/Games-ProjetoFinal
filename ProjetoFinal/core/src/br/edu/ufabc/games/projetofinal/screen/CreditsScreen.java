@@ -64,6 +64,8 @@ public class CreditsScreen extends AbstractScreen{
 			font.draw(spriteBatch, blinking_text,100,70); 
 		}
 		
+		font.draw(spriteBatch, "Created by: Felipe, Lucas e Luiz",100,800); 
+		
 		spriteBatch.end();
 	}
 

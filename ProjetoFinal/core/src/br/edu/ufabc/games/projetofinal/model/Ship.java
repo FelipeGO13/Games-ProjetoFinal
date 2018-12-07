@@ -104,8 +104,7 @@ public class Ship {
 		setYaw(-Gdx.input.getDeltaX() * camera.SENSITIVITY);
 		setPitch(Gdx.input.getDeltaY() * camera.SENSITIVITY);
 		
-		if(onGravity && fuel < 100) {
-			System.out.println("Gravidade");
+		if(onGravity && fuel < 1000) {
 			fuel += 1;
 		}
 		
