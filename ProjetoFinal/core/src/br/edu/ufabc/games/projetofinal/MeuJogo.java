@@ -94,6 +94,10 @@ public class MeuJogo extends Game implements InputProcessor, ControllerListener 
 			Commands.comandos[Commands.ACELERANDO] = true;
 			return true;
 		}
+		if (keycode == Input.Keys.F) {
+			Commands.comandos[Commands.CLOSEUP] = true;
+			return true;
+		}
 		return false;
 	}
 
@@ -125,6 +129,10 @@ public class MeuJogo extends Game implements InputProcessor, ControllerListener 
 		}
 		if (keycode == Input.Keys.SHIFT_LEFT) {
 			Commands.comandos[Commands.ACELERANDO] = false;
+			return true;
+		}
+		if (keycode == Input.Keys.F) {
+			Commands.comandos[Commands.CLOSEUP] = false;
 			return true;
 		}
 		if (keycode == Input.Keys.ESCAPE) {
@@ -178,43 +186,78 @@ public class MeuJogo extends Game implements InputProcessor, ControllerListener 
 	public boolean buttonDown(Controller controller, int buttonCode) {
 		// TODO Auto-generated method stub
         if (buttonCode == 0) {
-        	Commands.comandos[Commands.TRAS] = true;
-        	return true;
-        }
-        if (buttonCode == 1) {
-        	Commands.comandos[Commands.DIREITA] = true;
-        	return true;
-        }
-        if (buttonCode == 2) {
-        	Commands.comandos[Commands.ESQUERDA] = true;
-        	return true;
-        }
-        if (buttonCode == 3) {
-        	Commands.comandos[Commands.FRENTE] = true;
-        	return true;
-        }
+			Commands.comandos[Commands.FRENTE] = true;
+			return true;
+		}
+		if (buttonCode == 1) {
+			Commands.comandos[Commands.TRAS] = true;
+			return true;
+		}
+		if (buttonCode == 2) {
+			Commands.comandos[Commands.ESQUERDA] = true;
+			return true;
+		}
+		if (buttonCode == 3) {
+			Commands.comandos[Commands.DIREITA] = true;
+			return true;
+		}
+		if (buttonCode == 5) {
+			Commands.comandos[Commands.INCLINANDO_ESQUERDA] = true;
+			return true;
+		}
+		if (buttonCode == 6) {
+			Commands.comandos[Commands.INCLINANDO_DIREITA] = true;
+			return true;
+		}
+		if (buttonCode == 8) {
+			Commands.comandos[Commands.ACELERANDO] = true;
+			return true;
+		}
+		if (buttonCode == 9) {
+			Commands.comandos[Commands.CLOSEUP] = true;
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public boolean buttonUp(Controller controller, int buttonCode) {
-		// TODO Auto-generated method stub
 		if (buttonCode == 0) {
-        	Commands.comandos[Commands.TRAS] = false;
-        	return true;
-        }
-        if (buttonCode == 1) {
-        	Commands.comandos[Commands.DIREITA] = false;
-        	return true;
-        }
-        if (buttonCode == 2) {
-        	Commands.comandos[Commands.ESQUERDA] = false;
-        	return true;
-        }
-        if (buttonCode == 3) {
-        	Commands.comandos[Commands.FRENTE] = false;
-        	return true;
-        }
+			Commands.comandos[Commands.FRENTE] = false;
+			return true;
+		}
+		if (buttonCode == 1) {
+			Commands.comandos[Commands.TRAS] = false;
+			return true;
+		}
+		if (buttonCode == 2) {
+			Commands.comandos[Commands.ESQUERDA] = false;
+			return true;
+		}
+		if (buttonCode == 3) {
+			Commands.comandos[Commands.DIREITA] = false;
+			return true;
+		}
+		if (buttonCode == 5) {
+			Commands.comandos[Commands.INCLINANDO_ESQUERDA] = false;
+			return true;
+		}
+		if (buttonCode == 6) {
+			Commands.comandos[Commands.INCLINANDO_DIREITA] = false;
+			return true;
+		}
+		if (buttonCode == 8) {
+			Commands.comandos[Commands.ACELERANDO] = false;
+			return true;
+		}
+		if (buttonCode == 9) {
+			Commands.comandos[Commands.CLOSEUP] = false;
+			return true;
+		}
+		if (buttonCode == 11) {
+			Gdx.app.exit();
+			return true;
+		}
 		return false;
 	}
 

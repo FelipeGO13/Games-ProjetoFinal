@@ -83,21 +83,28 @@ public class GameScreen extends AbstractScreen {
 		
 		bodies.add(nave.getCurrent());
 		
-		createStar(new Vector3(-50,0,-250));
-		createStar(new Vector3(0,0,-250));
+		MassiveBody sun1 = createStar(new Vector3(-50,0,-250));
+		MassiveBody sun2 = createStar(new Vector3(0,0,-250));
+		MassiveBody sun3 = createStar(new Vector3(10,-10,-100));
 		
-		Random rnd = new Random();
-		int numPlanets = rnd.nextInt((5 - 1) + 1);
-		for (int i = 0; i < 5; i++) {
-			createBody(i);
-		}
-
+		//createSystem(sun1);
+		createSystem(sun2);
+		//createSystem(sun3);
+		
 		collisionConfig = new btDefaultCollisionConfiguration();
 		dispatcher = new btCollisionDispatcher(collisionConfig);
 
 	}
 	
-	void createStar(Vector3 position) {
+	void createSystem(MassiveBody sun) {
+		Random rnd = new Random();
+		int numPlanets = rnd.nextInt(10 + 1) + 5;
+		for (int i = 0; i < numPlanets; i++) {
+			createBody(rnd.nextInt(5), sun);
+		}
+	}
+	
+	MassiveBody createStar(Vector3 position) {
 		MassiveBody star = new MassiveBody("SUN");
 		star.getCurrent().setPosition(position);
 		star.getCurrent().setVelocity(Bodies.SUN.getVel());
@@ -105,6 +112,8 @@ public class GameScreen extends AbstractScreen {
 		star.getCurrent().transform.scale(Bodies.SUN.getScale(), Bodies.SUN.getScale(), Bodies.SUN.getScale());
 		
 		bodies.add(star.getCurrent());
+		
+		return star;
 	}
 	
 	boolean checkCollision(GameObject b) {
@@ -174,7 +183,8 @@ public class GameScreen extends AbstractScreen {
 		if (!Commands.comandos[Commands.ACELERANDO]) {
 			nave.desacelerar();
 		}
-
+		
+		nave.setCloseUp(Commands.comandos[Commands.CLOSEUP]);
 		
 		for(GameObject b: bodies) {
 			if(checkCollision(b) && b.bodyType.equals("SUN")) {
@@ -203,11 +213,11 @@ public class GameScreen extends AbstractScreen {
 		
 	}
 
-	public void createBody(int id) {
+	public void createBody(int id, MassiveBody sun) {
 		MassiveBody mb = new MassiveBody(Bodies.getById(id).getModel());
 
 		Vector3 position = Bodies.getById(id).getPos().cpy();
-		Vector3 positionSun = Bodies.getById(-1).getPos().cpy();
+		Vector3 positionSun = sun.getCurrent().getPosition().cpy();
 		mb.getCurrent().setPosition(position.add(positionSun));
 		mb.getCurrent().setVelocity(Bodies.getById(id).getVel());
 		mb.getCurrent().setMass(Bodies.getById(id).getMass());

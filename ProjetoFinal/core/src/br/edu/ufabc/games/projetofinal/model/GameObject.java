@@ -24,7 +24,7 @@ public class GameObject extends ModelInstance {
 	public Vector3 tmp;
 	public String bodyType;
 	
-	public float ENERGY_ABS_RATE = 10f;
+	public float ENERGY_ABS_RATE = 100f;
 	public float energy = 0;
 
 	public GameObject(Model model,  btCollisionShape shape) {

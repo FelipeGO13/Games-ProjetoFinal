@@ -14,6 +14,7 @@ public class Ship {
 	private int direcao;
 	private int inclinar = 0;
 	private boolean acelerando = false;
+	private boolean closeup = false;
 	private float velocidade = NORMAL_SPEED;
 	private Vector3 direction = new Vector3();
 
@@ -24,7 +25,7 @@ public class Ship {
 	private static final int DIREITA = 4;
 
 	private static final float ACELERACAO = 2f;
-	private static final float NORMAL_SPEED = 1f;
+	private static final float NORMAL_SPEED = 3f;
 	private static final float MAX_SPEED = 8f;
 	private static final float ROLL_SPEED = 30f;
 	
@@ -32,6 +33,7 @@ public class Ship {
 	
 	public int remainingFalls = 1;
 	public float fuel;
+	private boolean stop = true;
 	private Vector3 lastPosition;
 	private Vector3 newPosition;
 	
@@ -54,7 +56,7 @@ public class Ship {
 	
 	public void setPosition(float x, float y, float z) {
 		camera.position.set(x, y, z);
-		gameObject.setPosition(camera.position);
+		gameObject.setPosition(camera.position.cpy());
 	}
 	
 	public void setYaw(float angle) {
@@ -111,6 +113,10 @@ public class Ship {
 	public void pararDeInclinar() {
 		inclinar = 0;
 	}
+	
+	public void setCloseUp(boolean value) {
+		closeup = value;
+	}
 
 	public void update(float delta) {
 		
@@ -127,18 +133,6 @@ public class Ship {
 			gameObject.transform.getTranslation(newPosition);
 			direction.set(camera.direction);
 		}
-		if (direcao == PARADO) {
-			gameObject.transform.getTranslation(lastPosition);
-			gameObject.transform.getTranslation(newPosition);
-			
-			if (!acelerando) {
-				velocidade -= ACELERACAO * delta;
-				if (velocidade <= 0f) {
-					direction.set(0,0,0);
-					velocidade = NORMAL_SPEED;
-				}
-			}
-		}
 		if (direcao == TRAS) {
 			gameObject.transform.getTranslation(newPosition);
 			direction.set(camera.direction).scl(-1);
@@ -154,21 +148,47 @@ public class Ship {
 		
 		/* Translacao da nave */
 		
-		if (acelerando) {
-			velocidade += ACELERACAO * delta;
-			if (velocidade >= MAX_SPEED)
-				velocidade = MAX_SPEED;
+		if (direcao == PARADO) {
+			gameObject.transform.getTranslation(lastPosition);
+			gameObject.transform.getTranslation(newPosition);
+			
+			if (!acelerando) {
+				velocidade -= ACELERACAO * delta;
+				if (velocidade <= 0f) {
+					//direction.set(0,0,0);
+					velocidade = NORMAL_SPEED;
+				}
+			}
+			if (stop) {
+				gameObject.velocity.set(0,0,0);
+				stop = false;
+			}
+			
+		} else {
+			stop = true;
+			
+			if (acelerando) {
+				velocidade += ACELERACAO * delta;
+				if (velocidade >= MAX_SPEED)
+					velocidade = MAX_SPEED;
+			}
+			
+			//camera.translate(direction.cpy().scl(velocidade));
+			gameObject.velocity.add(direction.cpy().scl(velocidade*delta));
 		}
 		
-		camera.translate(direction.cpy().scl(velocidade));
-		//gameObject.velocity.add(direction.cpy().scl(velocidade));
+		Vector3 pos = gameObject.position.cpy();
+		if (!closeup) {
+			pos.sub(camera.direction);
+		}
+		camera.position.set(pos);
 		
 		
 		/* Atualizar energia e massa capturados */
 		
 		float diff = lastPosition.dst(newPosition);
 		if(diff > 10 && fuel > 0) {
-			fuel -= 2*velocidade;
+			fuel -= 8*direction.len();
 		}
 		
 		fuel += gameObject.getEnergy();
