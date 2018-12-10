@@ -81,8 +81,14 @@ public class StartScreen extends AbstractScreen {
 		spriteBatch.begin();
 		spriteBatch.draw(texture, 0, 0, Utils.GAME_WIDTH, Utils.GAME_HEIGHT, 0, 0, texture.getWidth(),
 				texture.getHeight(), false, false);
-		if (!loaded)
-		    font.draw(spriteBatch, "Loading..."+progress+"%", 100, 400);
+		font.draw(spriteBatch, "Controls: ", 150, 650);
+	    font.draw(spriteBatch, "Press W, A, S, D to move the ship ", 100, 600);
+	    font.draw(spriteBatch, "Use the mouse to control your direction", 100, 550);
+	    font.draw(spriteBatch, "Press SHIFT to boost your ship, but remember:", 100, 500);
+	    font.draw(spriteBatch, "the boost uses more energy", 100, 450);
+		if (!loaded) {
+		    font.draw(spriteBatch, "Loading..."+progress+"%", 100, 70);
+		}
 		else {
 			if (visible) {
 				font.draw(spriteBatch,"Touch to Start!",100,70); 

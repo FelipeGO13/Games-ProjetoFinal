@@ -194,7 +194,6 @@ public class GameScreen extends AbstractScreen {
 		for(GameObject b: bodies) {
 			if(checkCollision(b) && b.bodyType.equals("SUN")) {
 				nave.remainingFalls -= 1;
-				music.play();
 				break;
 
 			}
@@ -206,10 +205,12 @@ public class GameScreen extends AbstractScreen {
 		
 		/* Consicoes de fim de jogo */
 		if (nave.remainingFalls < 0) {
+			music.play();
 			END_STATE = "LOST ON A GRAVITATIONAL WELL";
 			setDone(true);
 		}
 		if(nave.fuel <=0) {
+			music.play();
 			END_STATE = "OUT OF FUEL";
 			setDone(true);
 		}
