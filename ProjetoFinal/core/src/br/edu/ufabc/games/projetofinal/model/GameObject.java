@@ -35,11 +35,6 @@ public class GameObject extends ModelInstance {
 		corpo.setWorldTransform(this.transform);
 		acceleration = new Vector3();
 		tmp = new Vector3();
-		/* modo debug */
-		System.out.println("Animacoes = " + animations.size);
-		for (Animation a : animations) {
-			System.out.println(" --- Animacao " + a.id);
-		}
 
 		animationController = new AnimationController(this);
 		if (animations.size > 0) {

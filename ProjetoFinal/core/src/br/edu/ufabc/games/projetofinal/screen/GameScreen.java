@@ -58,6 +58,7 @@ public class GameScreen extends AbstractScreen {
 	btCollisionConfiguration collisionConfig;
 	btDispatcher dispatcher;
 	private Music music;
+	private Music musicWin;
 
 	public GameScreen(String id) {
 		super(id);
@@ -86,7 +87,9 @@ public class GameScreen extends AbstractScreen {
 		bodies.add(nave.getCurrent());
 		
 		music = Gdx.audio.newMusic(Gdx.files.internal("colisao.mp3"));
+		musicWin = Gdx.audio.newMusic(Gdx.files.internal("victory.mp3"));
 		music.setLooping(false);
+		musicWin.setLooping(false);
 		
 		MassiveBody sun1 = createStar(new Vector3(-50,0,-250));
 		MassiveBody sun2 = createStar(new Vector3(0,0,-250));
@@ -215,6 +218,7 @@ public class GameScreen extends AbstractScreen {
 			setDone(true);
 		}
 		if(checkCollision(objetivo)) {
+			musicWin.play();
 			END_STATE = "ARRIVED SAFELY!";
 			setDone(true);
 		}

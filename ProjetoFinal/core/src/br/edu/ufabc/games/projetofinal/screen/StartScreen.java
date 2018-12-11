@@ -91,7 +91,7 @@ public class StartScreen extends AbstractScreen {
 		}
 		else {
 			if (visible) {
-				font.draw(spriteBatch,"Touch to Start!",100,70); 
+				font.draw(spriteBatch,"Click to Start!",100,70); 
 			}
 		}
 
