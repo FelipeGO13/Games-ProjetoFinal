@@ -58,7 +58,6 @@ public class GameScreen extends AbstractScreen {
 	btCollisionConfiguration collisionConfig;
 	btDispatcher dispatcher;
 	private Music music;
-	private Music musicWin;
 
 	public GameScreen(String id) {
 		super(id);
@@ -85,19 +84,13 @@ public class GameScreen extends AbstractScreen {
 		nave.getCurrent().corpo.setWorldTransform(nave.getCurrent().transform);
 		
 		bodies.add(nave.getCurrent());
-		
-		music = Gdx.audio.newMusic(Gdx.files.internal("colisao.mp3"));
-		musicWin = Gdx.audio.newMusic(Gdx.files.internal("victory.mp3"));
-		music.setLooping(false);
-		musicWin.setLooping(false);
-		
+	
 		MassiveBody sun1 = createStar(new Vector3(-50,0,-250));
 		MassiveBody sun2 = createStar(new Vector3(0,0,-250));
 		MassiveBody sun3 = createStar(new Vector3(10,-10,-100));
+		MassiveBody sun4 = createStar(new Vector3(20,-10,-200));
 		
-		//createSystem(sun1);
 		createSystem(sun2);
-		//createSystem(sun3);
 		
 		collisionConfig = new btDefaultCollisionConfiguration();
 		dispatcher = new btCollisionDispatcher(collisionConfig);
@@ -208,17 +201,20 @@ public class GameScreen extends AbstractScreen {
 		
 		/* Consicoes de fim de jogo */
 		if (nave.remainingFalls < 0) {
+			music = Gdx.audio.newMusic(Gdx.files.internal("lose.mp3"));
 			music.play();
 			END_STATE = "LOST ON A GRAVITATIONAL WELL";
 			setDone(true);
 		}
 		if(nave.fuel <=0) {
+			music = Gdx.audio.newMusic(Gdx.files.internal("lose.mp3"));
 			music.play();
 			END_STATE = "OUT OF FUEL";
 			setDone(true);
 		}
 		if(checkCollision(objetivo)) {
-			musicWin.play();
+			music = Gdx.audio.newMusic(Gdx.files.internal("victory.mp3"));
+			music.play();
 			END_STATE = "ARRIVED SAFELY!";
 			setDone(true);
 		}
