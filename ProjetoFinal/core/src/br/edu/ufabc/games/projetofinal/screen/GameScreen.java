@@ -58,6 +58,7 @@ public class GameScreen extends AbstractScreen {
 	btCollisionConfiguration collisionConfig;
 	btDispatcher dispatcher;
 	private Music music;
+	private Music backgroundMusic;
 
 	public GameScreen(String id) {
 		super(id);
@@ -70,6 +71,8 @@ public class GameScreen extends AbstractScreen {
 		bitmapFont = new BitmapFont(Gdx.files.internal("fonts/space.fnt"));
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 1, 1, 1, 1));
+		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("somstart.mp3"));
+		music = Gdx.audio.newMusic(Gdx.files.internal("lose.mp3"));
 
 		cenario = new GameObject(ModelFactory.getModelbyName("CENARIO"), null);
 		cenario.transform.scale(500, 500, 500);
@@ -94,14 +97,12 @@ public class GameScreen extends AbstractScreen {
 		
 		collisionConfig = new btDefaultCollisionConfiguration();
 		dispatcher = new btCollisionDispatcher(collisionConfig);
-
+		backgroundMusic.play();
 	}
 	
 	void createSystem(MassiveBody sun) {
-		Random rnd = new Random();
-		int numPlanets = rnd.nextInt(10 + 1) + 5;
-		for (int i = 0; i < numPlanets; i++) {
-			createBody(rnd.nextInt(5), sun);
+		for (int i = 0; i < 5; i++) {
+			createBody(i, sun);
 		}
 	}
 	
@@ -201,21 +202,22 @@ public class GameScreen extends AbstractScreen {
 		
 		/* Consicoes de fim de jogo */
 		if (nave.remainingFalls < 0) {
-			music = Gdx.audio.newMusic(Gdx.files.internal("lose.mp3"));
 			music.play();
 			END_STATE = "LOST ON A GRAVITATIONAL WELL";
+			backgroundMusic.stop();
 			setDone(true);
 		}
 		if(nave.fuel <=0) {
-			music = Gdx.audio.newMusic(Gdx.files.internal("lose.mp3"));
 			music.play();
 			END_STATE = "OUT OF FUEL";
+			backgroundMusic.stop();
 			setDone(true);
 		}
 		if(checkCollision(objetivo)) {
 			music = Gdx.audio.newMusic(Gdx.files.internal("victory.mp3"));
 			music.play();
 			END_STATE = "ARRIVED SAFELY!";
+			backgroundMusic.stop();
 			setDone(true);
 		}
 		

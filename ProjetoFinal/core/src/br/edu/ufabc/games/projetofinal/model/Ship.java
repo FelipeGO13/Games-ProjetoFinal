@@ -54,9 +54,10 @@ public class Ship {
 		camera.lookAt(Vector3.Z);
 		camera.update();
 		
-		fuel = 1000f;
+		fuel = 1200f;
 		newPosition = new Vector3();
 		lastPosition = new Vector3();
+		music = Gdx.audio.newMusic(Gdx.files.internal("somnave.mp3"));
 	}
 	
 	public void setPosition(float x, float y, float z) {
@@ -81,7 +82,7 @@ public class Ship {
 
 	public void andarParaFrente() {
 		direcao = FRENTE;
-		music = Gdx.audio.newMusic(Gdx.files.internal("somnave.mp3"));
+		
 		music.setLooping(false);
 		music.play();
 		
@@ -100,6 +101,7 @@ public class Ship {
 	}
 	
 	public void parar() {
+		music.stop();
 		direcao = PARADO;
 	}
 	
